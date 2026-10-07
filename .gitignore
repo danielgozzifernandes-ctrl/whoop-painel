@@ -1,0 +1,8 @@
+config.json
+tokens.json
+whoop.db
+state.enc
+site/
+dashboard/index.html
+__pycache__/
+*.pyc

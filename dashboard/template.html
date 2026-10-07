@@ -1,0 +1,1362 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painel de Recuperação</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0f1c24">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Recuperação">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #eef2f1;
+  --surface: #ffffff;
+  --surface-2: #e8eeec;
+  --ink: #0f1c24;
+  --ink-2: #48565c;
+  --muted: #7a888d;
+  --grid: #e3e9e7;
+  --axis: #c3cdcb;
+  --border: rgba(15, 28, 36, 0.08);
+  --shadow: 0 1px 2px rgba(15, 28, 36, 0.04), 0 4px 16px rgba(15, 28, 36, 0.04);
+  --accent: #2a78d6;
+  --accent-soft: rgba(42, 120, 214, 0.10);
+  --accent-ink: #1c5cab;
+  --hero: #0f1c24;
+  --hero-2: #1b2f3b;
+  --hero-ink: #f3f7f8;
+  --hero-muted: #93a6ae;
+  --good: #0ca30c;
+  --good-ink: #006300;
+  --warn: #e09a00;
+  --warn-ink: #8a5a00;
+  --bad: #d03b3b;
+  --bad-ink: #a32424;
+  --sleep: #9085e9;
+  --strain: #3987e5;
+  --st-deep: #184f95;
+  --st-rem: #3987e5;
+  --st-light: #9ec5f4;
+  --st-awake: #d3d6cf;
+  --z0: #c9cdc8;
+  --z1: #86b6ef;
+  --z2: #1baf7a;
+  --z3: #eda100;
+  --z4: #eb6834;
+  --z5: #d03b3b;
+  --font: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0a1115;
+    --surface: #121b20;
+    --surface-2: #1c272d;
+    --ink: #eef3f4;
+    --ink-2: #b2bfc3;
+    --muted: #7f8f95;
+    --grid: #1f2a30;
+    --axis: #34434a;
+    --border: rgba(255, 255, 255, 0.07);
+    --shadow: none;
+    --accent: #3987e5;
+    --accent-soft: rgba(57, 135, 229, 0.15);
+    --accent-ink: #86b6ef;
+    --hero: #13252f;
+    --hero-2: #1d3542;
+    --good-ink: #3fcf3f;
+    --warn: #fab219;
+    --warn-ink: #fab219;
+    --bad: #e66767;
+    --bad-ink: #f08a8a;
+    --st-deep: #6da7ec;
+    --st-rem: #2a78d6;
+    --st-light: #184f95;
+    --st-awake: #45514f;
+    --z0: #45514f;
+    --z1: #3987e5;
+    --z2: #199e70;
+    --z3: #c98500;
+    --z4: #d95926;
+    --z5: #e66767;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a1115;
+  --surface: #121b20;
+  --surface-2: #1c272d;
+  --ink: #eef3f4;
+  --ink-2: #b2bfc3;
+  --muted: #7f8f95;
+  --grid: #1f2a30;
+  --axis: #34434a;
+  --border: rgba(255, 255, 255, 0.07);
+  --shadow: none;
+  --accent: #3987e5;
+  --accent-soft: rgba(57, 135, 229, 0.15);
+  --accent-ink: #86b6ef;
+  --hero: #13252f;
+  --hero-2: #1d3542;
+  --good-ink: #3fcf3f;
+  --warn: #fab219;
+  --warn-ink: #fab219;
+  --bad: #e66767;
+  --bad-ink: #f08a8a;
+  --st-deep: #6da7ec;
+  --st-rem: #2a78d6;
+  --st-light: #184f95;
+  --st-awake: #45514f;
+  --z0: #45514f;
+  --z1: #3987e5;
+  --z2: #199e70;
+  --z3: #c98500;
+  --z4: #d95926;
+  --z5: #e66767;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+[hidden] { display: none !important; }
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-inline: 16px;
+  padding-block: 22px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
+p { margin: 0; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.num { font-variant-numeric: tabular-nums; }
+
+.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 16px; }
+.top h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+.updated { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); background: var(--surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; }
+.updated::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--good); box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 22%, transparent); }
+.updated.stale::before { background: var(--warn); box-shadow: 0 0 0 3px color-mix(in srgb, var(--warn) 22%, transparent); }
+
+.tabs { display: flex; gap: 4px; background: var(--surface-2); border-radius: 14px; padding: 4px; width: fit-content; max-width: 100%; overflow-x: auto; }
+.tab { border: 0; background: transparent; padding: 9px 15px; border-radius: 10px; font-weight: 600; font-size: 14px; color: var(--ink-2); cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 7px; }
+.tab svg { width: 18px; height: 18px; flex: none; }
+.tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow), 0 0 0 1px var(--border); }
+.tab:hover:not([aria-selected="true"]) { color: var(--ink); }
+.bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.seg { display: flex; gap: 2px; background: var(--surface-2); border-radius: 11px; padding: 3px; }
+.seg button { border: 0; background: transparent; padding: 6px 13px; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 0 0 1px var(--border); }
+.range-note { font-size: 13px; color: var(--muted); }
+
+@media (max-width: 720px) {
+  .wrap { padding-block: 14px 120px; gap: 16px; }
+  .top h1 { font-size: 24px; }
+  .tabs {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; width: auto; border-radius: 0;
+    justify-content: space-around; gap: 0;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    -webkit-backdrop-filter: saturate(1.6) blur(16px); backdrop-filter: saturate(1.6) blur(16px);
+    border-top: 1px solid var(--border); overflow: visible;
+  }
+  .tab { flex-direction: column; gap: 3px; font-size: 10.5px; padding: 6px 2px; flex: 1; min-width: 0; }
+  .tab svg { width: 23px; height: 23px; }
+  .tab[aria-selected="true"] { box-shadow: none; background: transparent; color: var(--accent-ink); }
+}
+
+.panel { display: flex; flex-direction: column; gap: 18px; animation: fade 0.25s ease-out; }
+@keyframes fade { from { opacity: 0.4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .panel { animation: none; } }
+
+.card { background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.card-h { display: flex; gap: 10px; align-items: flex-start; }
+.card-h .ci { flex: none; width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--accent-ink); }
+.card-h .ci svg { width: 17px; height: 17px; }
+.card h3 { font-size: 15.5px; font-weight: 700; letter-spacing: -0.005em; }
+.card .sub { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.stack { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+@media (max-width: 900px) { .grid-3 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 860px) { .grid-2 { grid-template-columns: minmax(0, 1fr); } }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
+.tile { background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.tile .label { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+.tile .value { font-size: 26px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.15; }
+.tile .value small { font-size: 14px; font-weight: 600; color: var(--ink-2); margin-left: 2px; }
+.tile .foot { font-size: 12.5px; color: var(--muted); }
+.tile .spark { margin-top: auto; padding-top: 6px; height: 34px; position: relative; }
+.tile .spark svg { width: 100%; height: 28px; display: block; overflow: visible; }
+@media (max-width: 420px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tile .value { font-size: 23px; } }
+.delta { font-weight: 600; }
+.delta.good { color: var(--good-ink); }
+.delta.bad { color: var(--bad-ink); }
+.delta.flat { color: var(--ink-2); }
+
+.hero { background: radial-gradient(120% 140% at 0% 0%, var(--hero-2) 0%, var(--hero) 60%); color: var(--hero-ink); border-radius: 22px; padding: 22px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 26px; align-items: center; box-shadow: var(--shadow); }
+.hero .eyebrow { color: var(--hero-muted); }
+.hero h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.015em; }
+.hero p { color: #c4d2d7; max-width: 58ch; }
+.hero-main { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.rings { display: flex; align-items: center; gap: 18px; }
+.ring { position: relative; flex: none; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
+.ring .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.ring .big { font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+.ring .cap { font-size: 10.5px; color: var(--hero-muted); font-family: var(--mono); letter-spacing: 0.07em; text-transform: uppercase; margin-top: 4px; }
+.ring circle.val { transition: stroke-dasharray 0.9s cubic-bezier(.2,.7,.2,1); }
+@media (prefers-reduced-motion: reduce) { .ring circle.val { transition: none; } }
+.minis { display: flex; flex-direction: column; gap: 14px; }
+.hero-stats { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 4px; }
+.hero-stats div { display: flex; flex-direction: column; }
+.hero-stats b { font-size: 18px; font-weight: 700; }
+.hero-stats span { font-size: 12px; color: var(--hero-muted); }
+@media (max-width: 680px) {
+  .hero { grid-template-columns: minmax(0, 1fr); padding: 20px 16px; gap: 18px; }
+  .rings { justify-content: center; }
+}
+
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 600; width: fit-content; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pill.good { color: var(--good-ink); background: color-mix(in srgb, var(--good) 14%, transparent); }
+.pill.warn { color: var(--warn-ink); background: color-mix(in srgb, var(--warn) 18%, transparent); }
+.pill.bad { color: var(--bad-ink); background: color-mix(in srgb, var(--bad) 14%, transparent); }
+.pill.info { color: var(--accent-ink); background: var(--accent-soft); }
+.hero .pill.good { color: #7ee07e; background: rgba(12, 163, 12, 0.22); }
+.hero .pill.warn { color: #ffd166; background: rgba(250, 178, 25, 0.2); }
+.hero .pill.bad { color: #ff9a9a; background: rgba(230, 103, 103, 0.22); }
+.hero .pill.info { color: #a9cdf7; background: rgba(57, 135, 229, 0.22); }
+
+.vitals { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 760px) { .vitals { grid-template-columns: repeat(2, minmax(0, 1fr)); } .vitals > :last-child { grid-column: 1 / -1; } }
+.vital { border-radius: 14px; background: var(--surface-2); padding: 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.vital .vl { font-size: 12.5px; color: var(--ink-2); font-weight: 600; display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.vital .vv { font-size: 21px; font-weight: 700; letter-spacing: -0.01em; }
+.vital .vv small { font-size: 12.5px; color: var(--ink-2); font-weight: 600; margin-left: 2px; }
+.vital .vf { font-size: 12px; color: var(--muted); }
+.vital .st { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 99px; white-space: nowrap; }
+.vital .st.ok { color: var(--good-ink); background: color-mix(in srgb, var(--good) 14%, transparent); }
+.vital .st.att { color: var(--warn-ink); background: color-mix(in srgb, var(--warn) 18%, transparent); }
+.vital .st.na { color: var(--muted); background: var(--surface); }
+
+.week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.wday { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.wday .dot { width: 100%; max-width: 48px; aspect-ratio: 1; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; color: #fff; }
+.wday .dot.empty { background: var(--surface-2); color: var(--muted); }
+.wday.today .lbl { color: var(--ink); font-weight: 700; }
+
+.cmp { display: grid; gap: 10px; }
+.cmp-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: baseline; font-size: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--grid); }
+.cmp-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.cmp-row .now { font-weight: 700; font-size: 16px; text-align: right; }
+.cmp-row .was { color: var(--muted); font-size: 12.5px; text-align: right; min-width: 70px; }
+
+.plan { display: grid; gap: 16px; }
+.plan-item { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 12px; align-items: start; }
+.plan-item .ico { width: 38px; height: 38px; border-radius: 11px; background: var(--accent-soft); color: var(--accent-ink); display: flex; align-items: center; justify-content: center; }
+.plan-item .ico svg { width: 20px; height: 20px; }
+.plan-item h4 { margin: 0 0 2px; font-size: 15px; }
+.plan-item p { color: var(--ink-2); font-size: 14px; }
+.gauge { position: relative; height: 10px; border-radius: 99px; background: var(--surface-2); margin-top: 12px; }
+.gauge .band { position: absolute; top: 0; bottom: 0; border-radius: 99px; background: color-mix(in srgb, var(--strain) 40%, transparent); }
+.gauge .mark { position: absolute; top: -4px; width: 4px; height: 18px; border-radius: 2px; background: var(--ink); transform: translateX(-2px); }
+.gauge-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 5px; font-family: var(--mono); }
+
+.streaks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.streak { background: var(--surface-2); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 2px; }
+.streak b { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.streak span { font-size: 12.5px; color: var(--ink-2); }
+
+.insights { display: grid; }
+.insight { display: grid; grid-template-columns: 4px minmax(0, 1fr); gap: 14px; padding: 13px 0; }
+.insight:first-child { padding-top: 0; }
+.insight .stripe { border-radius: 4px; }
+.insight.good .stripe { background: var(--good); }
+.insight.warn .stripe { background: var(--warn); }
+.insight.bad .stripe { background: var(--bad); }
+.insight.info .stripe { background: var(--accent); }
+.insight h4 { margin: 0 0 3px; font-size: 15px; }
+.insight p { color: var(--ink-2); font-size: 14px; }
+.insight .ev { font-size: 11.5px; color: var(--muted); margin-top: 5px; font-family: var(--mono); }
+.insight + .insight { border-top: 1px solid var(--grid); }
+
+.chart { position: relative; width: 100%; touch-action: pan-y; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.chart svg text { font-family: var(--mono); font-size: 10.5px; fill: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
+.legend i.line { width: 14px; height: 2px; border-radius: 2px; }
+.legend i.band { width: 14px; height: 10px; border-radius: 2px; opacity: 0.5; }
+.empty-note { font-size: 13px; color: var(--muted); padding: 18px 0; text-align: center; }
+.tip { position: fixed; z-index: 50; pointer-events: none; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16); border-radius: 12px; padding: 9px 11px; font-size: 12.5px; min-width: 150px; max-width: 250px; }
+.tip .t-h { font-weight: 700; margin-bottom: 5px; }
+.tip .t-r { display: grid; grid-template-columns: 14px auto 1fr; gap: 6px; align-items: center; }
+.tip .t-r i { width: 12px; height: 3px; border-radius: 2px; }
+.tip .t-r b { font-weight: 700; font-variant-numeric: tabular-nums; }
+.tip .t-r span { color: var(--ink-2); }
+.tip .t-n { color: var(--muted); font-size: 11.5px; margin-top: 5px; }
+
+.hbar { display: flex; gap: 2px; height: 14px; border-radius: 4px; overflow: hidden; }
+.hbar div { height: 100%; min-width: 2px; }
+.hbar div:first-child { border-radius: 4px 0 0 4px; }
+.hbar div:last-child { border-radius: 0 4px 4px 0; }
+
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+.cal .hd { font-size: 11px; color: var(--muted); text-align: center; font-family: var(--mono); text-transform: uppercase; }
+.cal .c { aspect-ratio: 1; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700; color: #fff; position: relative; max-height: 60px; }
+.cal .c small { position: absolute; top: 3px; left: 5px; font-size: 9.5px; font-weight: 500; opacity: 0.85; }
+.cal .c.none { background: var(--surface-2); color: var(--muted); font-weight: 500; }
+.cal .c.out { background: transparent; }
+
+.workouts { display: grid; }
+.wo { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 4px 12px; padding: 14px 0; border-top: 1px solid var(--grid); align-items: center; }
+.wo:first-child { border-top: 0; padding-top: 2px; }
+.wo .wi { width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft); color: var(--accent-ink); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; }
+.wo .name { font-weight: 700; }
+.wo .when { font-size: 13px; color: var(--muted); }
+.wo .st { text-align: right; }
+.wo .st b { font-size: 22px; font-weight: 800; }
+.wo .st span { display: block; font-size: 10.5px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; }
+.wo .facts { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--ink-2); }
+.wo .hbar { grid-column: 2 / -1; height: 7px; }
+
+.table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; background: var(--surface); }
+th, td { padding: 8px 10px; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; position: sticky; left: 0; background: var(--surface); }
+thead th { font-weight: 600; color: var(--ink-2); border-bottom: 1px solid var(--axis); font-size: 12px; }
+tbody tr + tr td { border-top: 1px solid var(--grid); }
+td .sw { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+
+.foot-note { font-size: 12.5px; color: var(--muted); max-width: 80ch; }
+.foot-note a { color: var(--accent-ink); }
+
+.lock { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; background: radial-gradient(120% 90% at 20% 0%, var(--hero-2), var(--hero) 70%); }
+.lock form { width: 100%; max-width: 360px; background: var(--surface); border-radius: 22px; padding: 26px 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35); }
+.lock h1 { font-size: 22px; font-weight: 800; }
+.lock p { color: var(--ink-2); font-size: 14px; }
+.lock input[type="password"] { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--axis); background: var(--bg); font-size: 16px; }
+.lock label.chk { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--ink-2); }
+.lock button { border: 0; border-radius: 12px; padding: 12px; background: var(--accent); color: #fff; font-weight: 700; font-size: 15px; cursor: pointer; }
+.lock button[disabled] { opacity: 0.6; cursor: progress; }
+.lock .err { color: var(--bad-ink); font-size: 13.5px; min-height: 1em; }
+.lock-logo { width: 54px; height: 54px; }
+</style>
+</head>
+<body>
+
+<div class="lock" id="lock" hidden>
+  <form id="lockForm" autocomplete="on">
+    <svg class="lock-logo" viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="16" fill="#0f1c24"/><circle cx="30" cy="30" r="17" fill="none" stroke="#284658" stroke-width="5"/><path d="M30 13a17 17 0 1 1-17 17" fill="none" stroke="#5cd68c" stroke-width="5" stroke-linecap="round"/></svg>
+    <h1>Painel de Recuperação</h1>
+    <p>Seus dados estão criptografados. Digite a senha para abrir.</p>
+    <input type="text" name="username" value="whoop" autocomplete="username" hidden>
+    <input type="password" id="pw" name="password" autocomplete="current-password" placeholder="Senha" required>
+    <label class="chk"><input type="checkbox" id="remember" checked> Lembrar neste aparelho</label>
+    <button type="submit" id="unlockBtn">Abrir painel</button>
+    <p class="err" id="lockErr" role="alert"></p>
+  </form>
+</div>
+
+<div class="wrap" id="app" hidden>
+  <header class="top">
+    <div>
+      <div class="eyebrow" id="hello">WHOOP</div>
+      <h1>Painel de Recuperação</h1>
+    </div>
+    <span class="updated" id="meta"></span>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Seções">
+    <button class="tab" role="tab" data-tab="hoje" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hoje</button>
+    <button class="tab" role="tab" data-tab="rec" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>Recuperação</button>
+    <button class="tab" role="tab" data-tab="sono" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>Sono</button>
+    <button class="tab" role="tab" data-tab="esf" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5 14h6l-1 7 8-11h-6z"/></svg>Esforço</button>
+    <button class="tab" role="tab" data-tab="pad" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="17" r="2"/><circle cx="11" cy="11" r="2"/><circle cx="17" cy="14" r="2"/><circle cx="19" cy="6" r="2"/></svg>Padrões</button>
+  </nav>
+
+  <div class="bar" id="rangeBar" hidden>
+    <div class="seg" role="group" aria-label="Período">
+      <button data-range="7" aria-pressed="false">7 dias</button>
+      <button data-range="30" aria-pressed="true">30 dias</button>
+      <button data-range="90" aria-pressed="false">90 dias</button>
+      <button data-range="all" aria-pressed="false">Tudo</button>
+    </div>
+    <span class="range-note" id="rangeNote"></span>
+  </div>
+
+  <main id="view"></main>
+
+  <p class="foot-note">Dados da API oficial do WHOOP, atualizados automaticamente. Gráficos e sugestões servem para orientar treino e hábitos e não são diagnóstico médico. A faixa normal de cada sinal usa sua média dos 60 dias anteriores ± 1 desvio-padrão. <a href="#" id="logout">Esquecer a senha neste aparelho</a></p>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+const PAYLOAD = /*__WHOOP_DATA__*/null;
+let DATA = null;
+
+/* ---------- utilidades ---------- */
+const $ = (q, r = document) => r.querySelector(q);
+const SVGNS = "http://www.w3.org/2000/svg";
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v;
+    else if (k === "style") e.style.cssText = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null && k !== false) e.append(k instanceof Node ? k : document.createTextNode(String(k)));
+  return e;
+}
+function s(tag, attrs, style) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs || {})) if (v != null) e.setAttribute(k, v);
+  if (style) e.style.cssText = style;
+  return e;
+}
+function icon(path) {
+  const x = s("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round" });
+  x.innerHTML = path;
+  return x;
+}
+const IC = {
+  bolt: '<path d="M13 3 5 14h6l-1 7 8-11h-6z"/>',
+  moon: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  pulse: '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+  heart: '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+  cal: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+  trend: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  shield: '<path d="M12 3l8 3v6c0 4.5-3.5 8-8 9-4.5-1-8-4.5-8-9V6z"/>',
+  flame: '<path d="M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-3 2-4 2-7 1.5 1 2 2 2 3 1-2 1-4 1-6z"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  scale: '<path d="M12 3v18M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+  steps: '<path d="M7 18c-2 0-3-2-3-4s1-5 3-5 2 3 2 5-1 4-2 4zM17 13c-2 0-3-2-3-4s1-5 3-5 2 3 2 5-1 4-2 4z"/>',
+};
+const ok = v => v != null && !Number.isNaN(v);
+const mean = a => { const v = a.filter(ok); return v.length ? v.reduce((x, y) => x + y, 0) / v.length : null; };
+const sum = a => a.filter(ok).reduce((x, y) => x + y, 0);
+const sd = a => { const v = a.filter(ok); if (v.length < 2) return null; const m = mean(v); return Math.sqrt(v.reduce((x, y) => x + (y - m) ** 2, 0) / (v.length - 1)); };
+const median = a => { const v = a.filter(ok).sort((x, y) => x - y); if (!v.length) return null; const m = v.length >> 1; return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2; };
+const pearson = (xs, ys) => {
+  const n = xs.length; if (n < 3) return null;
+  const mx = mean(xs), my = mean(ys); let a = 0, b = 0, c = 0;
+  for (let i = 0; i < n; i++) { a += (xs[i] - mx) * (ys[i] - my); b += (xs[i] - mx) ** 2; c += (ys[i] - my) ** 2; }
+  return b && c ? a / Math.sqrt(b * c) : null;
+};
+const round = (v, n = 0) => ok(v) ? Number(v.toFixed(n)) : null;
+const fmt = (v, n = 0) => ok(v) ? v.toLocaleString("pt-BR", { minimumFractionDigits: n, maximumFractionDigits: n }) : "–";
+const fmtH = hrs => { if (!ok(hrs)) return "–"; const m = Math.round(hrs * 60); return `${Math.floor(m / 60)}h${String(m % 60).padStart(2, "0")}`; };
+const fmtClock = min => { if (!ok(min)) return "–"; const m = ((Math.round(min) % 1440) + 1440) % 1440; return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`; };
+const dObj = d => new Date(d + "T12:00:00");
+const WD = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+const WD_LONG = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+const MONTHS = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+const fmtDate = d => { const x = dObj(d); return `${String(x.getDate()).padStart(2, "0")}/${String(x.getMonth() + 1).padStart(2, "0")}`; };
+const fmtDateLong = d => `${WD_LONG[dObj(d).getDay()]}, ${fmtDate(d)}`;
+const iso = x => `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`;
+const addDays = (d, n) => { const x = dObj(d); x.setDate(x.getDate() + n); return iso(x); };
+const SPORTS = {
+  soccer: "Futebol", activity: "Atividade", running: "Corrida", cycling: "Ciclismo", walking: "Caminhada",
+  weightlifting: "Musculação", "functional-fitness": "Funcional", "strength-trainer": "Musculação", swimming: "Natação",
+  basketball: "Basquete", tennis: "Tênis", yoga: "Yoga", hiit: "HIIT", boxing: "Boxe", "jiu-jitsu": "Jiu-jitsu",
+  hiking: "Trilha", spinning: "Spinning", pilates: "Pilates", volleyball: "Vôlei", padel: "Padel", "beach-tennis": "Beach tennis",
+  elliptical: "Elíptico", rowing: "Remo", crossfit: "CrossFit", stretching: "Alongamento", sauna: "Sauna", meditation: "Meditação",
+  "table-tennis": "Tênis de mesa", surfing: "Surfe", skateboarding: "Skate", dance: "Dança", climber: "Escalada", "rock-climbing": "Escalada",
+};
+const sportName = n => SPORTS[n] || (n ? n.replace(/-/g, " ").replace(/^./, c => c.toUpperCase()) : "Atividade");
+
+const zoneOf = r => !ok(r) ? null : r >= 67 ? "good" : r >= 34 ? "warn" : "bad";
+const ZONE_LABEL = { good: "Verde", warn: "Amarelo", bad: "Vermelho" };
+const ZONE_VAR = { good: "var(--good)", warn: "var(--warn)", bad: "var(--bad)" };
+const STRAIN_TARGET = { good: [14, 18], warn: [10, 14], bad: [4, 10] };
+const strainLevel = v => !ok(v) ? "" : v < 10 ? "leve" : v < 14 ? "moderado" : v < 18 ? "alto" : "máximo";
+
+/* ---------- dados ---------- */
+let DAYS = [], WOS = [], PROFILE = {}, NAPS = [];
+function prepare() {
+  DAYS = DATA.days.map(d => ({ ...d }));
+  WOS = DATA.workouts;
+  NAPS = DATA.naps || [];
+  PROFILE = DATA.profile || {};
+  DAYS.forEach((d, i) => {
+    const win = (k, from, to) => DAYS.slice(Math.max(0, from), to).map(x => x[k]).filter(ok);
+    const w7 = k => { const v = win(k, i - 6, i + 1); return v.length >= 3 ? mean(v) : null; };
+    d.hrv7 = w7("hrv"); d.rhr7 = w7("rhr");
+    const hv = win("hrv", i - 6, i + 1);
+    d.hrvCv = hv.length >= 4 ? (sd(hv) / mean(hv)) * 100 : null;
+    for (const k of ["hrv", "rhr", "resp", "temp", "spo2"]) {
+      const prev = win(k, i - 60, i);
+      d[k + "Base"] = prev.length >= 7 ? { m: mean(prev), sd: sd(prev), n: prev.length } : null;
+      d[k + "Ref"] = prev.length >= 4 ? { m: mean(prev), sd: sd(prev), n: prev.length } : null;
+    }
+    d.wd = dObj(d.d).getDay();
+    d.wo = WOS.filter(w => w.d === d.d);
+    d.weekend = d.wd === 0 || d.wd === 6;
+  });
+}
+
+/* ---------- estado ---------- */
+const store = {
+  get(k, f) { try { return localStorage.getItem(k) ?? f; } catch { return f; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} },
+};
+const state = { tab: store.get("tab", "hoje"), range: store.get("range", "30") };
+if (/^#(hoje|rec|sono|esf|pad)$/.test(location.hash)) state.tab = location.hash.slice(1);
+function rangeDays() {
+  if (state.range === "all") return DAYS;
+  const last = DAYS[DAYS.length - 1].d;
+  const cut = addDays(last, -(Number(state.range) - 1));
+  return DAYS.filter(d => d.d >= cut);
+}
+
+/* ---------- tooltip ---------- */
+const tip = $("#tip");
+function showTip(x, y, title, rows, note) {
+  tip.replaceChildren(h("div", { class: "t-h" }, title));
+  for (const r of rows) {
+    if (!r) continue;
+    tip.append(h("div", { class: "t-r" }, h("i", { style: `background:${r.color || "transparent"}` }), h("b", {}, r.value), h("span", {}, r.label)));
+  }
+  if (note) tip.append(h("div", { class: "t-n" }, note));
+  tip.hidden = false;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  let left = x + 14, top = y - th - 14;
+  if (left + tw > innerWidth - 8) left = x - tw - 14;
+  if (left < 8) left = 8;
+  if (top < 8) top = y + 18;
+  tip.style.left = left + "px";
+  tip.style.top = top + "px";
+}
+const hideTip = () => { tip.hidden = true; };
+addEventListener("scroll", hideTip, { passive: true });
+
+/* ---------- gráficos ---------- */
+const charts = [];
+function niceTicks(lo, hi, count = 4) {
+  const span = hi - lo || 1;
+  const raw = span / count;
+  const mag = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(st => st >= raw) || raw;
+  const t = [];
+  for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) t.push(round(v, 6));
+  return t;
+}
+function barPath(x, y0, y1, w, r, both) {
+  const top = Math.min(y0, y1), bot = Math.max(y0, y1), hh = bot - top;
+  if (hh <= 0.5) return "";
+  r = Math.min(r, w / 2, hh / (both ? 2 : 1));
+  const l = x - w / 2;
+  if (both) return `M${l},${top + r}a${r},${r} 0 0 1 ${r},${-r}h${w - 2 * r}a${r},${r} 0 0 1 ${r},${r}v${hh - 2 * r}a${r},${r} 0 0 1 ${-r},${r}h${-(w - 2 * r)}a${r},${r} 0 0 1 ${-r},${-r}z`;
+  return `M${l},${bot}v${-(hh - r)}a${r},${r} 0 0 1 ${r},${-r}h${w - 2 * r}a${r},${r} 0 0 1 ${r},${r}v${hh - r}z`;
+}
+
+function timeChart(days, o) {
+  const box = h("div", { class: "chart" });
+  const draw = () => {
+    box.replaceChildren();
+    const W = Math.max(260, box.clientWidth || 600), H = o.height || 200;
+    const m = { l: o.ml || 38, r: 10, t: 12, b: 26 };
+    const n = days.length;
+    const step = (W - m.l - m.r) / n;
+    const xc = i => m.l + step * (i + 0.5);
+    const bw = Math.min(24, Math.max(3, step * 0.62));
+    const [lo, hi] = [o.yMin, o.yMax];
+    const ih = H - m.t - m.b;
+    const y = v => o.invert ? m.t + ((v - lo) / (hi - lo)) * ih : m.t + (1 - (v - lo) / (hi - lo)) * ih;
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, height: H, role: "img", "aria-label": o.label || "" });
+
+    const ticks = o.ticks || niceTicks(lo, hi, 4);
+    for (const t of ticks) {
+      svg.append(s("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t) }, `stroke:var(--grid);stroke-width:1`));
+      const tx = s("text", { x: m.l - 6, y: y(t) + 3.5, "text-anchor": "end" });
+      tx.textContent = (o.yFmt || (v => fmt(v)))(t);
+      svg.append(tx);
+    }
+    if (!o.invert && lo === 0) svg.append(s("line", { x1: m.l, x2: W - m.r, y1: y(0), y2: y(0) }, `stroke:var(--axis);stroke-width:1`));
+
+    const every = Math.max(1, Math.ceil(46 / step));
+    days.forEach((d, i) => {
+      if ((n - 1 - i) % every) return;
+      const tx = s("text", { x: xc(i), y: H - 8, "text-anchor": "middle" });
+      tx.textContent = n <= 10 ? `${WD[d.wd]} ${fmtDate(d.d).slice(0, 2)}` : fmtDate(d.d);
+      svg.append(tx);
+    });
+
+    const col = (c, d) => typeof c === "function" ? c(d) : c;
+    for (const L of o.layers) {
+      if (L.type === "band") {
+        let seg = [];
+        const flush = () => {
+          if (seg.length > 1) {
+            const top = seg.map(([i, , b]) => `${xc(i)},${y(b)}`);
+            const bot = seg.slice().reverse().map(([i, a]) => `${xc(i)},${y(a)}`);
+            svg.append(s("polygon", { points: [...top, ...bot].join(" ") }, `fill:${L.color};opacity:${L.opacity ?? 0.13}`));
+          }
+          seg = [];
+        };
+        days.forEach((d, i) => { const a = L.lo(d), b = L.hi(d); if (ok(a) && ok(b)) seg.push([i, Math.max(lo, a), Math.min(hi, b)]); else flush(); });
+        flush();
+      }
+      if (L.type === "hline" && ok(L.y)) {
+        svg.append(s("line", { x1: m.l, x2: W - m.r, y1: y(L.y), y2: y(L.y) }, `stroke:${L.color};stroke-width:1.5;opacity:.7`));
+        if (L.text) { const tx = s("text", { x: W - m.r, y: y(L.y) - 5, "text-anchor": "end" }); tx.textContent = L.text; svg.append(tx); }
+      }
+      if (L.type === "bar") days.forEach((d, i) => {
+        const v = L.v(d); if (!ok(v)) return;
+        const p = barPath(xc(i), y(Math.max(lo, 0)), y(Math.min(Math.max(v, lo), hi)), bw, 4);
+        if (p) svg.append(s("path", { d: p }, `fill:${col(L.color, d)};opacity:${L.dim && L.dim(d) ? 0.45 : 1}`));
+      });
+      if (L.type === "stack") days.forEach((d, i) => {
+        let acc = 0;
+        const vals = L.parts.map(p => p.v(d));
+        if (!vals.some(v => ok(v) && v > 0)) return;
+        const last = vals.reduce((li, v, k) => (ok(v) && v > 0 ? k : li), -1);
+        let first = true;
+        L.parts.forEach((p, k) => {
+          const v = vals[k]; if (!ok(v) || v <= 0) return;
+          const y0 = y(acc), y1 = y(acc + v);
+          acc += v;
+          const p2 = barPath(xc(i), y0 - (first ? 0 : 1), y1 + (k === last ? 0 : 1), bw, k === last ? 4 : 0);
+          first = false;
+          if (p2) svg.append(s("path", { d: p2 }, `fill:${p.color}`));
+        });
+      });
+      if (L.type === "range") days.forEach((d, i) => {
+        const a = L.lo(d), b = L.hi(d); if (!ok(a) || !ok(b)) return;
+        const p = barPath(xc(i), y(a), y(b), bw, 4, true);
+        if (p) svg.append(s("path", { d: p }, `fill:${col(L.color, d)}`));
+      });
+      if (L.type === "tick") days.forEach((d, i) => {
+        const v = L.v(d); if (!ok(v)) return;
+        svg.append(s("line", { x1: xc(i) - bw / 2 - 3, x2: xc(i) + bw / 2 + 3, y1: y(v), y2: y(v) }, `stroke:${L.color};stroke-width:2;stroke-linecap:round`));
+      });
+      if (L.type === "line") {
+        let dpath = "", pen = false, lastI = -1;
+        days.forEach((d, i) => {
+          const v = L.v(d);
+          if (!ok(v)) { pen = false; return; }
+          dpath += `${pen ? "L" : "M"}${xc(i)},${y(v)}`; pen = true; lastI = i;
+        });
+        if (dpath) svg.append(s("path", { d: dpath }, `fill:none;stroke:${L.color};stroke-width:${L.width || 2};stroke-linejoin:round;stroke-linecap:round;opacity:${L.opacity ?? 1}`));
+        const showAll = L.dots && n <= 31;
+        days.forEach((d, i) => {
+          const v = L.v(d);
+          if (!ok(v) || !(showAll || (L.dots && i === lastI))) return;
+          svg.append(s("circle", { cx: xc(i), cy: y(v), r: 4 }, `fill:${L.color};stroke:var(--surface);stroke-width:2`));
+        });
+      }
+    }
+
+    const cross = s("line", { y1: m.t, y2: H - m.b }, `stroke:var(--axis);stroke-width:1;display:none`);
+    svg.append(cross);
+    const hit = s("rect", { x: m.l, y: 0, width: W - m.l - m.r, height: H, tabindex: 0 }, `fill:transparent;cursor:crosshair;outline:none`);
+    let cur = -1;
+    const show = (i, cx, cy) => {
+      cur = i; const d = days[i];
+      cross.setAttribute("x1", xc(i)); cross.setAttribute("x2", xc(i)); cross.style.display = "";
+      showTip(cx, cy, fmtDateLong(d.d), o.tip(d), o.tipNote && o.tipNote(d));
+    };
+    const at = ev => {
+      const r = svg.getBoundingClientRect();
+      const x = (ev.clientX - r.left) * (W / r.width);
+      return Math.max(0, Math.min(n - 1, Math.floor((x - m.l) / step)));
+    };
+    hit.addEventListener("pointermove", ev => show(at(ev), ev.clientX, ev.clientY));
+    hit.addEventListener("pointerdown", ev => show(at(ev), ev.clientX, ev.clientY));
+    hit.addEventListener("pointerleave", () => { cross.style.display = "none"; hideTip(); });
+    hit.addEventListener("blur", () => { cross.style.display = "none"; hideTip(); });
+    hit.addEventListener("keydown", ev => {
+      if (!["ArrowLeft", "ArrowRight"].includes(ev.key)) return;
+      ev.preventDefault();
+      const i = Math.max(0, Math.min(n - 1, cur < 0 ? n - 1 : cur + (ev.key === "ArrowRight" ? 1 : -1)));
+      const r = svg.getBoundingClientRect();
+      show(i, r.left + (xc(i) / W) * r.width, r.top + 20);
+    });
+    svg.append(hit);
+    box.append(svg);
+  };
+  box._draw = draw;
+  charts.push(box);
+  return box;
+}
+
+function scatter(pts, o) {
+  const box = h("div", { class: "chart" });
+  const draw = () => {
+    box.replaceChildren();
+    const W = Math.max(260, box.clientWidth || 500), H = 230;
+    const m = { l: 38, r: 12, t: 12, b: 36 };
+    const xs = pts.map(p => p.x), ys = pts.map(p => p.y);
+    const xlo = Math.min(...xs), xhi = Math.max(...xs);
+    const pad = (xhi - xlo) * 0.08 || 1;
+    const X0 = xlo - pad, X1 = xhi + pad, Y0 = 0, Y1 = 100;
+    const x = v => m.l + ((v - X0) / (X1 - X0)) * (W - m.l - m.r);
+    const y = v => m.t + (1 - (v - Y0) / (Y1 - Y0)) * (H - m.t - m.b);
+    const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, height: H, role: "img", "aria-label": o.xLabel });
+    for (const t of [0, 25, 50, 75, 100]) {
+      svg.append(s("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t) }, "stroke:var(--grid);stroke-width:1"));
+      const tx = s("text", { x: m.l - 6, y: y(t) + 3.5, "text-anchor": "end" }); tx.textContent = `${t}%`; svg.append(tx);
+    }
+    for (const t of niceTicks(X0, X1, Math.max(3, Math.floor(W / 90)))) {
+      if (t < X0 || t > X1) continue;
+      const tx = s("text", { x: x(t), y: H - 20, "text-anchor": "middle" }); tx.textContent = (o.xFmt || fmt)(t); svg.append(tx);
+    }
+    const xl = s("text", { x: (m.l + W - m.r) / 2, y: H - 4, "text-anchor": "middle" }); xl.textContent = o.xLabel; svg.append(xl);
+    if (pts.length >= 5) {
+      const mx = mean(xs), my = mean(ys);
+      const b = xs.reduce((a, v, i) => a + (v - mx) * (ys[i] - my), 0) / xs.reduce((a, v) => a + (v - mx) ** 2, 0);
+      if (Number.isFinite(b)) {
+        const a = my - b * mx;
+        const yy = v => Math.max(Y0, Math.min(Y1, a + b * v));
+        svg.append(s("line", { x1: x(xlo), x2: x(xhi), y1: y(yy(xlo)), y2: y(yy(xhi)) }, "stroke:var(--muted);stroke-width:1.5;opacity:.7"));
+      }
+    }
+    for (const p of pts) svg.append(s("circle", { cx: x(p.x), cy: y(p.y), r: 5 }, `fill:${p.color};stroke:var(--surface);stroke-width:2`));
+    const hit = s("rect", { x: 0, y: 0, width: W, height: H }, "fill:transparent");
+    const near = ev => {
+      const r = svg.getBoundingClientRect();
+      const px = (ev.clientX - r.left) * (W / r.width), py = (ev.clientY - r.top) * (H / r.height);
+      let best = null, bd = 1e9;
+      for (const p of pts) { const dd = (x(p.x) - px) ** 2 + (y(p.y) - py) ** 2; if (dd < bd) { bd = dd; best = p; } }
+      if (best && bd < 40 ** 2) showTip(ev.clientX, ev.clientY, best.title, best.rows); else hideTip();
+    };
+    hit.addEventListener("pointermove", near);
+    hit.addEventListener("pointerdown", near);
+    hit.addEventListener("pointerleave", hideTip);
+    svg.append(hit);
+    box.append(svg);
+  };
+  box._draw = draw;
+  charts.push(box);
+  return box;
+}
+
+function spark(values, color) {
+  const pts = values.map((x, i) => [i, x]).filter(([, x]) => ok(x));
+  const wrap = h("div", { class: "spark", "aria-hidden": "true" });
+  if (pts.length < 2) return wrap;
+  const W = 100, H = 28;
+  const lo = Math.min(...pts.map(p => p[1])), hi = Math.max(...pts.map(p => p[1]));
+  const X = i => (i / Math.max(1, values.length - 1)) * W;
+  const Y = x => H - 3 - ((x - lo) / (hi - lo || 1)) * (H - 6);
+  const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, preserveAspectRatio: "none" });
+  const line = pts.map(([i, x], k) => `${k ? "L" : "M"}${X(i)},${Y(x)}`).join("");
+  svg.append(s("path", { d: `${line}L${X(pts[pts.length - 1][0])},${H}L${X(pts[0][0])},${H}Z` }, `fill:${color};opacity:.12`));
+  svg.append(s("path", { d: line, "vector-effect": "non-scaling-stroke" }, `fill:none;stroke:${color};stroke-width:1.75;stroke-linejoin:round`));
+  wrap.append(svg);
+  const last = pts[pts.length - 1];
+  wrap.append(h("span", { style: `position:absolute;left:calc(${X(last[0])}% - 3.5px);top:${6 + Y(last[1]) - 3.5}px;width:7px;height:7px;border-radius:50%;background:${color};box-shadow:0 0 0 2px var(--surface)` }));
+  return wrap;
+}
+
+function ringEl(size, stroke, frac, color, track, big, cap, bigSize) {
+  const R = (size - stroke) / 2, C = 2 * Math.PI * R;
+  const el = h("div", { class: "ring", style: `width:${size}px;height:${size}px` });
+  const sv = s("svg", { viewBox: `0 0 ${size} ${size}` });
+  sv.append(s("circle", { cx: size / 2, cy: size / 2, r: R }, `fill:none;stroke:${track};stroke-width:${stroke}`));
+  if (ok(frac) && frac > 0) {
+    const c = s("circle", { cx: size / 2, cy: size / 2, r: R, class: "val", "stroke-dasharray": `0 ${C}` }, `fill:none;stroke:${color};stroke-width:${stroke};stroke-linecap:round`);
+    sv.append(c);
+    requestAnimationFrame(() => requestAnimationFrame(() => c.setAttribute("stroke-dasharray", `${Math.min(1, frac) * C} ${C}`)));
+  }
+  el.append(sv, h("div", { class: "center" }, h("div", { class: "big", style: `font-size:${bigSize}px` }, big), h("div", { class: "cap" }, cap)));
+  return el;
+}
+
+function legend(items) {
+  return h("div", { class: "legend" }, items.map(([label, color, kind]) => h("span", {}, h("i", { class: kind || "", style: `background:${color}` }), label)));
+}
+function hbar(parts) {
+  const tot = parts.reduce((a, p) => a + (p.v || 0), 0) || 1;
+  return h("div", { class: "hbar", role: "img", "aria-label": parts.map(p => `${p.label}: ${p.text || fmt(p.v)}`).join(", ") },
+    parts.filter(p => p.v > 0).map(p => h("div", { style: `flex:${p.v / tot};background:${p.color}`, title: `${p.label}: ${p.text || fmt(p.v)}` })));
+}
+function tile(label, value, unit, foot, sparkEl) {
+  return h("div", { class: "tile" }, h("div", { class: "label" }, label), h("div", { class: "value" }, value, unit ? h("small", {}, unit) : null), foot ? h("div", { class: "foot" }, foot) : null, sparkEl || null);
+}
+function card(ic, title, sub, ...body) {
+  return h("section", { class: "card" },
+    h("div", { class: "card-h" }, ic ? h("div", { class: "ci" }, icon(IC[ic])) : null, h("div", {}, h("h3", {}, title), sub ? h("p", { class: "sub" }, sub) : null)),
+    ...body);
+}
+const emptyNote = t => h("p", { class: "empty-note" }, t);
+
+/* ---------- análises ---------- */
+function analysis() {
+  const D = DAYS.filter(d => !d.live || ok(d.rec));
+  const done = DAYS.filter(d => !d.live);
+  const A = {};
+  A.sleepAvg = mean(D.map(d => d.sleep));
+  A.needAvg = mean(D.map(d => d.need));
+  A.effAvg = mean(D.map(d => d.eff));
+  const wk = D.filter(d => !d.weekend && ok(d.bed)), we = D.filter(d => d.weekend && ok(d.bed));
+  A.bedWk = mean(wk.map(d => d.bed)); A.bedWe = mean(we.map(d => d.bed));
+  A.wakeWk = median(wk.map(d => d.wake)); A.wakeWe = median(we.map(d => d.wake));
+  A.midWk = mean(wk.map(d => (d.bed + d.wake) / 2)); A.midWe = mean(we.map(d => (d.bed + d.wake) / 2));
+  A.nWk = wk.length; A.nWe = we.length;
+  A.sleepRec = D.filter(d => ok(d.sleep) && ok(d.rec)).map(d => ({ x: d.sleep, y: d.rec, d }));
+  A.bedRec = D.filter(d => ok(d.bed) && ok(d.rec)).map(d => ({ x: d.bed, y: d.rec, d }));
+  A.strainNext = [];
+  DAYS.forEach((d, i) => {
+    const nx = DAYS[i + 1];
+    if (!d.live && nx && ok(d.strain) && ok(nx.rec) && nx.d === addDays(d.d, 1)) A.strainNext.push({ x: d.strain, y: nx.rec, d, nx });
+  });
+  A.woMaxHr = Math.max(0, ...WOS.map(w => w.maxHr || 0), ...done.map(d => d.maxHr || 0));
+  const st = D.filter(d => ok(d.sleep) && d.sleep > 0);
+  A.deepPct = mean(st.map(d => d.deep / d.sleep)) * 100;
+  A.remPct = mean(st.map(d => d.rem / d.sleep)) * 100;
+  return A;
+}
+function splitCompare(pairs, thr) {
+  const lo = pairs.filter(p => p.x < thr), hi = pairs.filter(p => p.x >= thr);
+  return { lo: mean(lo.map(p => p.y)), hi: mean(hi.map(p => p.y)), nLo: lo.length, nHi: hi.length };
+}
+
+function vitalsOf(L) {
+  const out = [];
+  const add = (key, label, unit, dig, test) => {
+    const v = L[key], r = L[key + "Ref"];
+    let st = "na", txt = "sem base";
+    if (ok(v) && r) { const flag = test(v, r); st = flag ? "att" : "ok"; txt = flag || "normal"; }
+    out.push({ key, label, unit, dig, v, r, st, txt });
+  };
+  add("hrv", "HRV", "ms", 0, (v, r) => r.sd && v < r.m - r.sd ? "abaixo" : null);
+  add("rhr", "FC repouso", "bpm", 0, (v, r) => r.sd && v > r.m + Math.max(r.sd, 2) ? "acima" : null);
+  add("resp", "Respiração", "rpm", 1, (v, r) => v > r.m + 1 ? "elevada" : null);
+  add("temp", "Temp. pele", "°C", 1, (v, r) => v > r.m + 0.5 ? "elevada" : v < r.m - 0.7 ? "baixa" : null);
+  add("spo2", "SpO2", "%", 1, v => v < 94 ? "baixa" : null);
+  return out;
+}
+
+function insights(A) {
+  const out = [];
+  const L = DAYS[DAYS.length - 1];
+  const n = DAYS.filter(d => ok(d.rec)).length;
+  const early = n < 21;
+  const evTag = k => `${k} · ${early ? "tendência inicial, poucos dados" : "base sólida"}`;
+
+  const vit = vitalsOf(L).filter(v => v.st === "att");
+  if (vit.length >= 2) out.push({ lvl: "bad", t: `${vit.length} sinais vitais fora do normal hoje`,
+    p: `${vit.map(v => `${v.label} ${v.txt}`).join(", ")}. Quando vários sinais saem da faixa ao mesmo tempo, costuma ser estresse alto, álcool, viagem ou o começo de uma doença. Pegue leve hoje.`, ev: "comparado com seus dias anteriores" });
+
+  if (ok(A.sleepAvg) && ok(A.needAvg) && A.sleepAvg < A.needAvg - 0.75) out.push({ lvl: "bad", t: `Você dorme ${fmtH(A.needAvg - A.sleepAvg)} a menos do que precisa`,
+    p: `Sua média é ${fmtH(A.sleepAvg)} por noite, e o WHOOP estima que você precisa de ${fmtH(A.needAvg)}, já somando o débito acumulado. É o fator que mais limita sua Recovery.`, ev: evTag(`${A.sleepRec.length} noites`) });
+
+  if (A.sleepRec.length >= 6) {
+    const thr = A.sleepRec.filter(p => p.x >= 7).length >= 3 && A.sleepRec.filter(p => p.x < 7).length >= 3 ? 7 : round(median(A.sleepRec.map(p => p.x)), 1);
+    const c = splitCompare(A.sleepRec, thr);
+    if (c.nLo >= 2 && c.nHi >= 2 && ok(c.hi) && ok(c.lo)) {
+      const diff = c.hi - c.lo;
+      out.push({ lvl: diff > 3 ? "good" : "info", t: diff > 3 ? `Dormir ${fmtH(thr)} ou mais rende ${fmt(diff)} pontos de Recovery` : "Ainda não há diferença clara entre noites curtas e longas",
+        p: `Recovery média de ${fmt(c.hi)}% depois de noites com ${fmtH(thr)} ou mais, contra ${fmt(c.lo)}% nas noites mais curtas.`, ev: evTag(`${c.nHi} noites longas · ${c.nLo} curtas`) });
+    }
+  }
+  if (A.nWk >= 2 && A.nWe >= 1 && ok(A.midWk) && ok(A.midWe)) {
+    const jet = (A.midWe - A.midWk) / 60;
+    if (jet >= 1) out.push({ lvl: jet >= 2 ? "bad" : "warn", t: `Jet lag social de ${fmtH(jet)} no fim de semana`,
+      p: `Nos fins de semana o meio do seu sono acontece ${fmtH(jet)} mais tarde que nos dias úteis (você dorme em média às ${fmtClock(A.bedWe)}, contra ${fmtClock(A.bedWk)}). Para o corpo, é como mudar de fuso toda semana, e isso costuma derrubar a Recovery de domingo e segunda.`,
+      ev: evTag(`${A.nWk} noites úteis · ${A.nWe} de fim de semana`) });
+  }
+  if (A.strainNext.length >= 5) {
+    const c = splitCompare(A.strainNext, 14);
+    if (c.nHi >= 1 && c.nLo >= 2 && ok(c.hi) && ok(c.lo)) out.push({ lvl: c.lo - c.hi > 5 ? "warn" : "info",
+      t: c.lo - c.hi > 5 ? `Dias de Strain alto custam ${fmt(c.lo - c.hi)} pontos de Recovery no dia seguinte` : "Seu corpo tem absorvido bem os dias de Strain alto",
+      p: `Depois de dias com Strain 14 ou mais, a Recovery média do dia seguinte foi ${fmt(c.hi)}%. Depois de dias mais leves, foi ${fmt(c.lo)}%.`, ev: evTag(`${c.nHi} dias pesados · ${c.nLo} leves`) });
+  }
+  const b = L.hrvRef;
+  if (b && ok(L.hrv7)) {
+    const pct = (L.hrv7 / b.m - 1) * 100;
+    if (Math.abs(pct) >= 5) out.push({ lvl: pct > 0 ? "good" : "warn", t: `HRV da semana ${pct > 0 ? "acima" : "abaixo"} da sua média`,
+      p: `A média dos últimos 7 dias está em ${fmt(L.hrv7)} ms, ${fmt(Math.abs(pct))}% ${pct > 0 ? "acima" : "abaixo"} da sua referência de ${fmt(b.m)} ms. ${pct > 0 ? "Sinal de boa adaptação." : "Vale priorizar sono e pegar mais leve até voltar à faixa."}`, ev: evTag(`${b.n} dias de referência`) });
+  }
+  if (ok(L.hrvCv) && L.hrvCv > 12) out.push({ lvl: "warn", t: `HRV oscilando muito (variação de ${fmt(L.hrvCv)}%)`,
+    p: "Quando o HRV sobe e desce muito de um dia para o outro, normalmente a rotina está irregular: horários de sono diferentes, álcool ou treinos pesados seguidos. Abaixo de 10% é o ideal.", ev: "coeficiente de variação dos últimos 7 dias" });
+  if (PROFILE.maxHr && A.woMaxHr > PROFILE.maxHr) out.push({ lvl: "info", t: `Sua FC máxima real passou do perfil (${A.woMaxHr} bpm)`,
+    p: `O perfil do WHOOP usa ${PROFILE.maxHr} bpm, mas você já chegou a ${A.woMaxHr} bpm. Ajuste no app para o Strain e as zonas ficarem mais precisos.`, ev: "dado de treino" });
+  if (ok(A.deepPct) && ok(A.remPct) && ok(A.sleepAvg) && A.sleepAvg < 7 && A.deepPct >= 13 && A.remPct >= 18) out.push({ lvl: "good", t: "A qualidade do sono está boa, falta quantidade",
+    p: `${fmt(A.deepPct)}% do seu sono é profundo e ${fmt(A.remPct)}% é REM, os dois na faixa saudável típica. O ponto fraco é a duração, não a estrutura.`, ev: evTag(`${A.sleepRec.length} noites`) });
+  return out;
+}
+const insightEl = x => h("div", { class: "insight " + x.lvl }, h("div", { class: "stripe" }), h("div", {}, h("h4", {}, x.t), h("p", {}, x.p), x.ev ? h("div", { class: "ev" }, x.ev) : null));
+
+/* ---------- Hoje ---------- */
+function viewHoje() {
+  const L = DAYS[DAYS.length - 1];
+  const A = analysis();
+  const z = zoneOf(L.rec);
+  const narrow = innerWidth < 420;
+
+  const head = {
+    good: ["Corpo pronto para carga", "Sua recuperação está alta. Bom dia para o treino mais intenso da semana."],
+    warn: ["Recuperação moderada", "Dá para treinar, mas sem buscar recorde. Mantenha a intensidade controlada."],
+    bad: ["Dia de pegar leve", "Seu corpo ainda está se recuperando. Prefira treino leve, mobilidade e uma noite longa de sono."],
+  }[z] || ["Recovery ainda não calculada", "O WHOOP calcula a Recovery depois que você acorda e o sono é processado."];
+
+  const track = "rgba(255,255,255,.09)";
+  const recRing = ringEl(narrow ? 132 : 156, narrow ? 12 : 14, ok(L.rec) ? L.rec / 100 : 0, z ? ZONE_VAR[z] : "#888", track,
+    h("span", {}, ok(L.rec) ? L.rec : "–", ok(L.rec) ? h("small", { style: "font-size:.42em;font-weight:700" }, "%") : null), "Recovery", narrow ? 42 : 50);
+  const sleepRing = ringEl(narrow ? 82 : 92, 9, ok(L.perf) ? L.perf / 100 : 0, "var(--sleep)", track, ok(L.perf) ? `${L.perf}%` : "–", "Sono", narrow ? 18 : 20);
+  const strainRing = ringEl(narrow ? 82 : 92, 9, ok(L.strain) ? L.strain / 21 : 0, "var(--strain)", track, fmt(L.strain, 1), "Strain", narrow ? 18 : 20);
+
+  const hero = h("section", { class: "hero" },
+    h("div", { class: "rings" }, recRing, h("div", { class: "minis" }, sleepRing, strainRing)),
+    h("div", { class: "hero-main" },
+      h("div", { class: "eyebrow" }, fmtDateLong(L.d)),
+      h("h2", {}, head[0]),
+      h("div", { style: "display:flex;gap:8px;flex-wrap:wrap" },
+        z ? h("span", { class: "pill " + z }, `${ZONE_LABEL[z]} · ${z === "good" ? "67–100%" : z === "warn" ? "34–66%" : "0–33%"}`) : null,
+        L.cal ? h("span", { class: "pill info" }, "WHOOP calibrando") : null),
+      h("p", {}, head[1]),
+      h("div", { class: "hero-stats" },
+        h("div", {}, h("b", {}, `${fmt(L.hrv)} ms`), h("span", {}, "HRV")),
+        h("div", {}, h("b", {}, `${fmt(L.rhr)} bpm`), h("span", {}, "FC repouso")),
+        h("div", {}, h("b", {}, fmtH(L.sleep)), h("span", {}, `de ${fmtH(L.need)} necessárias`)),
+        h("div", {}, h("b", {}, fmt(L.kcal)), h("span", {}, L.live ? "kcal até agora" : "kcal")))));
+
+  const vit = vitalsOf(L);
+  const vitals = card("shield", "Sinais vitais de hoje", "Comparados com a sua própria faixa normal. Vários fora da faixa ao mesmo tempo é sinal de alerta",
+    h("div", { class: "vitals" }, vit.map(v => h("div", { class: "vital" },
+      h("div", { class: "vl" }, h("span", {}, v.label), h("span", { class: "st " + v.st }, v.txt)),
+      h("div", { class: "vv" }, fmt(v.v, v.dig), h("small", {}, v.unit)),
+      h("div", { class: "vf" }, v.r ? `sua média: ${fmt(v.r.m, v.dig)} ${v.unit}` : "base em formação")))));
+
+  const tgt = z ? STRAIN_TARGET[z] : null;
+  const gauge = tgt ? h("div", {},
+    h("div", { class: "gauge" }, h("div", { class: "band", style: `left:${(tgt[0] / 21) * 100}%;width:${((tgt[1] - tgt[0]) / 21) * 100}%` }),
+      ok(L.strain) ? h("div", { class: "mark", style: `left:${(Math.min(21, L.strain) / 21) * 100}%`, title: `Agora: ${fmt(L.strain, 1)}` }) : null),
+    h("div", { class: "gauge-scale" }, ["0", "7", "14", "21"].map(t => h("span", {}, t)))) : null;
+  const tomorrow = dObj(addDays(L.d, 1)).getDay();
+  const weekendTomorrow = tomorrow === 0 || tomorrow === 6;
+  const wakeT = weekendTomorrow ? (A.wakeWe ?? A.wakeWk) : (A.wakeWk ?? A.wakeWe);
+  const needT = ok(L.need) ? L.need : 8;
+  const effT = (A.effAvg || 92) / 100;
+  const bedT = ok(wakeT) ? wakeT - (needT / effT) * 60 : null;
+  const bedReal = ok(wakeT) ? wakeT - (Math.min(needT, 8) / effT) * 60 : null;
+  const plan = h("div", { class: "plan" },
+    tgt ? h("div", { class: "plan-item" }, h("div", { class: "ico" }, icon(IC.bolt)),
+      h("div", {}, h("h4", {}, `Strain entre ${tgt[0]} e ${tgt[1]} hoje`),
+        h("p", {}, ok(L.strain) && L.live ? `Você está em ${fmt(L.strain, 1)}. ${L.strain < tgt[0] ? (z === "good" ? "Tem espaço para um treino forte." : "Um treino moderado encaixa bem.") : L.strain > tgt[1] ? "Você já passou da faixa. O resto do dia pode ser leve." : "Você já está dentro da faixa."}` : "Faixa baseada na sua Recovery de hoje."),
+        gauge)) : null,
+    ok(bedReal) ? h("div", { class: "plan-item" }, h("div", { class: "ico" }, icon(IC.moon)),
+      h("div", {}, h("h4", {}, `Deite até as ${fmtClock(bedReal)}`),
+        h("p", {}, `Assim você dorme ${fmtH(Math.min(needT, 8))} e acorda às ${fmtClock(wakeT)}, ${weekendTomorrow ? "seu horário típico de fim de semana" : "seu horário típico em dia útil"}. ${needT > 8.25 ? `Sua necessidade total hoje é ${fmtH(needT)} porque inclui débito. Deitando às ${fmtClock(bedT)}, você zera a conta.` : ""}`))) : null,
+    ok(L.debt) && L.debt > 0.5 ? h("div", { class: "plan-item" }, h("div", { class: "ico" }, icon(IC.clock)),
+      h("div", {}, h("h4", {}, `Débito de sono: ${fmtH(L.debt)}`),
+        h("p", {}, "Já está somado à necessidade de hoje. Um cochilo de 20 a 30 minutos no começo da tarde ajuda a pagar sem atrapalhar a noite."))) : null);
+
+  const last7 = [];
+  for (let k = 6; k >= 0; k--) { const d = addDays(L.d, -k); last7.push(DAYS.find(x => x.d === d) || { d, wd: dObj(d).getDay() }); }
+  const week = h("div", { class: "week" }, last7.map(d => {
+    const zz = zoneOf(d.rec);
+    return h("div", { class: "wday" + (d.d === L.d ? " today" : "") },
+      h("div", { class: "dot" + (zz ? "" : " empty"), style: zz ? `background:${ZONE_VAR[zz]}` : "", title: zz ? `${fmtDateLong(d.d)}: ${d.rec}% (${ZONE_LABEL[zz]})` : "sem dado" }, ok(d.rec) ? d.rec : "–"),
+      h("span", { class: "lbl" }, d.d === L.d ? "hoje" : WD[d.wd]));
+  }));
+
+  const c7 = addDays(L.d, -7), c14 = addDays(L.d, -14);
+  const cur = DAYS.filter(d => d.d > c7), prev = DAYS.filter(d => d.d <= c7 && d.d > c14);
+  const done = a => a.filter(d => !d.live);
+  const rows = [
+    ["Recovery média", mean(cur.map(d => d.rec)), mean(prev.map(d => d.rec)), v => `${fmt(v)}%`],
+    ["HRV médio", mean(cur.map(d => d.hrv)), mean(prev.map(d => d.hrv)), v => `${fmt(v)} ms`],
+    ["FC de repouso", mean(cur.map(d => d.rhr)), mean(prev.map(d => d.rhr)), v => `${fmt(v)} bpm`],
+    ["Sono por noite", mean(cur.map(d => d.sleep)), mean(prev.map(d => d.sleep)), fmtH],
+    ["Strain médio", mean(done(cur).map(d => d.strain)), mean(done(prev).map(d => d.strain)), v => fmt(v, 1)],
+    ["Treinos", WOS.filter(w => w.d > c7).length, WOS.filter(w => w.d <= c7 && w.d > c14).length, v => fmt(v)],
+  ];
+  const cmp = h("div", { class: "cmp" }, rows.map(([lbl, a, b, f]) => h("div", { class: "cmp-row" },
+    h("span", {}, lbl), h("span", { class: "now" }, f(a)), h("span", { class: "was" }, prev.length ? `antes ${f(b)}` : "–"))));
+
+  let streakSleep = 0;
+  for (let i = DAYS.length - 1; i >= 0; i--) { if (!ok(DAYS[i].sleep)) continue; if (DAYS[i].sleep >= 7) streakSleep++; else break; }
+  const month = DAYS.filter(d => d.d.slice(0, 7) === L.d.slice(0, 7));
+  const greens = month.filter(d => zoneOf(d.rec) === "good").length;
+  const woDays = new Set(WOS.filter(w => w.d > c7).map(w => w.d)).size;
+  const streaks = h("div", { class: "streaks" },
+    h("div", { class: "streak" }, h("b", {}, streakSleep), h("span", {}, `noite${streakSleep === 1 ? "" : "s"} seguida${streakSleep === 1 ? "" : "s"} com 7h+`)),
+    h("div", { class: "streak" }, h("b", {}, greens), h("span", {}, `dia${greens === 1 ? "" : "s"} verde${greens === 1 ? "" : "s"} em ${MONTHS[dObj(L.d).getMonth()]}`)),
+    h("div", { class: "streak" }, h("b", {}, woDays), h("span", {}, "dias com treino na semana")));
+
+  const ins = insights(A);
+  return h("div", { class: "panel" }, hero,
+    h("div", { class: "grid-2" },
+      card("spark", "Plano de hoje", "Sugestões a partir da sua Recovery e dos seus horários", plan),
+      h("div", { class: "stack" },
+        card("cal", "Últimos 7 dias", "Recovery de cada manhã", week, legend([["Verde 67–100", "var(--good)"], ["Amarelo 34–66", "var(--warn)"], ["Vermelho 0–33", "var(--bad)"]])),
+        card("flame", "Sequências", null, streaks))),
+    vitals,
+    h("div", { class: "grid-2" },
+      card("list", "O que seus dados estão dizendo", null, ins.length ? h("div", { class: "insights" }, ins.slice(0, 4).map(insightEl)) : emptyNote("Ainda não há dados suficientes.")),
+      card("trend", "Últimos 7 dias × 7 anteriores", null, cmp)));
+}
+
+/* ---------- Recuperação ---------- */
+function calendar(R) {
+  const first = dObj(R[0].d), last = dObj(R[R.length - 1].d);
+  const start = new Date(first); start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
+  const map = new Map(DAYS.map(d => [d.d, d]));
+  const cells = ["seg", "ter", "qua", "qui", "sex", "sáb", "dom"].map(t => h("div", { class: "hd" }, t));
+  for (let x = new Date(start); x <= last; x.setDate(x.getDate() + 1)) {
+    const k = iso(x), d = map.get(k), inR = x >= first;
+    const zz = d && zoneOf(d.rec);
+    cells.push(h("div", { class: "c" + (!inR ? " out" : zz ? "" : " none"), style: zz ? `background:${ZONE_VAR[zz]}` : "", title: d && ok(d.rec) ? `${fmtDateLong(k)}: ${d.rec}%` : fmtDateLong(k) },
+      inR ? h("small", {}, x.getDate()) : null, inR && d && ok(d.rec) ? d.rec : ""));
+  }
+  return h("div", { class: "cal" }, cells);
+}
+
+function viewRec() {
+  const R = rangeDays();
+  const recs = R.map(d => d.rec).filter(ok);
+  const zc = { good: 0, warn: 0, bad: 0 };
+  recs.forEach(r => zc[zoneOf(r)]++);
+  const L = DAYS[DAYS.length - 1];
+  const last14 = k => DAYS.slice(-14).map(d => d[k]);
+  const hv = R.map(d => d.hrv).filter(ok), rh = R.map(d => d.rhr).filter(ok);
+  const tiles = h("div", { class: "tiles" },
+    tile("Recovery média", fmt(mean(recs)), "%", `${recs.length} dias no período`, spark(last14("rec"), "var(--good)")),
+    tile("HRV médio", fmt(mean(hv)), "ms", hv.length ? `de ${fmt(Math.min(...hv))} a ${fmt(Math.max(...hv))}` : "", spark(last14("hrv"), "var(--accent)")),
+    tile("FC de repouso", fmt(mean(rh)), "bpm", rh.length ? `mínima ${fmt(Math.min(...rh))}` : "", spark(last14("rhr"), "var(--z4)")),
+    tile("Estabilidade do HRV", ok(L.hrvCv) ? fmt(L.hrvCv, 1) : "–", "%", "variação em 7 dias; até 10% é estável", spark(last14("hrvCv"), "var(--muted)")),
+    tile("SpO2", fmt(mean(R.map(d => d.spo2)), 1), "%", "oxigenação no sono", spark(last14("spo2"), "var(--accent)")),
+    tile("Respiração", fmt(mean(R.map(d => d.resp)), 1), "rpm", "frequência no sono", spark(last14("resp"), "var(--sleep)")));
+
+  const recChart = timeChart(R, {
+    yMin: 0, yMax: 100, ticks: [0, 33, 66, 100], label: "Recovery diária",
+    layers: [{ type: "bar", v: d => d.rec, color: d => ZONE_VAR[zoneOf(d.rec)] }],
+    tip: d => [{ color: ok(d.rec) ? ZONE_VAR[zoneOf(d.rec)] : null, value: ok(d.rec) ? `${d.rec}%` : "–", label: ok(d.rec) ? `Recovery · ${ZONE_LABEL[zoneOf(d.rec)]}` : "Recovery" },
+      { color: "var(--accent)", value: `${fmt(d.hrv)} ms`, label: "HRV" }, { value: `${fmt(d.rhr)} bpm`, label: "FC repouso" }, { value: fmtH(d.sleep), label: "sono" }],
+  });
+
+  const metricChart = (k, unit, dig, color, avg) => {
+    const vals = R.flatMap(d => [d[k], d[k + "Base"] && d[k + "Base"].m + d[k + "Base"].sd, d[k + "Base"] && d[k + "Base"].m - d[k + "Base"].sd]).filter(ok);
+    if (!vals.length) return emptyNote("Sem dados no período.");
+    const spread = Math.max(...vals) - Math.min(...vals) || 1;
+    const ticks = niceTicks(Math.min(...vals) - spread * 0.15, Math.max(...vals) + spread * 0.15, 4);
+    return timeChart(R, {
+      yMin: ticks[0], yMax: ticks[ticks.length - 1], ticks, label: k, yFmt: v => fmt(v, dig && spread < 4 ? 1 : 0),
+      layers: [
+        { type: "band", lo: d => d[k + "Base"] && d[k + "Base"].m - d[k + "Base"].sd, hi: d => d[k + "Base"] && d[k + "Base"].m + d[k + "Base"].sd, color, opacity: 0.14 },
+        ...(avg ? [{ type: "line", v: d => d[k + "7"], color: "var(--ink-2)", width: 2, opacity: 0.5 }] : []),
+        { type: "line", v: d => d[k], color, dots: true },
+      ],
+      tip: d => [{ color, value: `${fmt(d[k], dig)} ${unit}`, label: "no dia" },
+        avg && ok(d[k + "7"]) ? { color: "var(--ink-2)", value: `${fmt(d[k + "7"], dig)} ${unit}`, label: "média 7 dias" } : null,
+        d[k + "Base"] ? { value: `${fmt(d[k + "Base"].m - d[k + "Base"].sd, dig)}–${fmt(d[k + "Base"].m + d[k + "Base"].sd, dig)}`, label: "faixa normal" } : null],
+    });
+  };
+  const bandLegend = (avg, color) => legend([["No dia", color, "line"], ...(avg ? [["Média 7 dias", "var(--ink-2)", "line"]] : []), ["Faixa normal", color, "band"]]);
+  const bandNote = () => L.hrvBase ? null : h("p", { class: "sub" }, "A faixa normal aparece depois de 7 dias de histórico e fica confiável perto dos 30.");
+
+  return h("div", { class: "panel" }, tiles,
+    h("div", { class: "grid-2" },
+      card("pulse", "Recovery diária", "Calculada a cada manhã a partir de HRV, FC de repouso, respiração e sono", recChart,
+        legend([["Verde 67–100", "var(--good)"], ["Amarelo 34–66", "var(--warn)"], ["Vermelho 0–33", "var(--bad)"]]),
+        h("div", {}, h("div", { class: "sub", style: "margin-bottom:6px" }, `No período: ${zc.good} verdes, ${zc.warn} amarelos, ${zc.bad} vermelhos`),
+          hbar([{ v: zc.good, color: "var(--good)", label: "Verde" }, { v: zc.warn, color: "var(--warn)", label: "Amarelo" }, { v: zc.bad, color: "var(--bad)", label: "Vermelho" }]))),
+      card("cal", "Calendário", "Recovery de cada dia do período", calendar(R))),
+    h("div", { class: "grid-2" },
+      card("heart", "HRV", "Variabilidade da frequência cardíaca (RMSSD). Mais alto costuma indicar melhor recuperação", metricChart("hrv", "ms", 0, "var(--accent)", true), bandLegend(true, "var(--accent)"), bandNote()),
+      card("heart", "FC de repouso", "Mais baixa costuma indicar melhor recuperação. Subidas de 3 a 5 bpm por vários dias pedem atenção", metricChart("rhr", "bpm", 0, "var(--z4)", true), bandLegend(true, "var(--z4)"), bandNote())),
+    h("div", { class: "grid-3" },
+      card("pulse", "Respiração no sono", "Costuma ser muito estável. Subir mais de 1 rpm pode indicar doença", metricChart("resp", "rpm", 1, "var(--sleep)"), bandLegend(false, "var(--sleep)")),
+      card("pulse", "Temperatura da pele", "Olhe a variação, não o valor. Ficar 0,5 °C acima do normal é sinal de alerta", metricChart("temp", "°C", 1, "var(--z3)"), bandLegend(false, "var(--z3)")),
+      card("pulse", "SpO2", "Oxigenação do sangue durante o sono. O normal é de 95 a 100%", metricChart("spo2", "%", 1, "var(--accent)"), bandLegend(false, "var(--accent)"))));
+}
+
+/* ---------- Sono ---------- */
+function viewSono() {
+  const R = rangeDays().filter(d => ok(d.sleep) || ok(d.rec));
+  const S = R.filter(d => ok(d.sleep));
+  if (!S.length) return h("div", { class: "panel" }, card("moon", "Sono", null, emptyNote("Sem noites registradas no período.")));
+  const last14 = k => DAYS.slice(-14).map(d => d[k]);
+  const L = DAYS[DAYS.length - 1];
+  const tiles = h("div", { class: "tiles" },
+    tile("Sono médio", fmtH(mean(S.map(d => d.sleep))), null, `necessidade média ${fmtH(mean(S.map(d => d.need)))}`, spark(last14("sleep"), "var(--sleep)")),
+    tile("Performance", fmt(mean(S.map(d => d.perf))), "%", "sono obtido ÷ necessário", spark(last14("perf"), "var(--sleep)")),
+    tile("Eficiência", fmt(mean(S.map(d => d.eff))), "%", "tempo dormindo ÷ tempo na cama", spark(last14("eff"), "var(--accent)")),
+    tile("Consistência", fmt(mean(S.map(d => d.cons))), "%", "regularidade dos horários", spark(last14("cons"), "var(--accent)")),
+    tile("Débito atual", fmtH(L.debt), null, "somado à necessidade de hoje", spark(last14("debt"), "var(--z4)")),
+    tile("Despertares", fmt(mean(S.map(d => d.dist)), 1), null, `por noite · ${fmt(mean(S.map(d => d.cycles)), 1)} ciclos de sono`));
+
+  const hiH = Math.ceil(Math.max(9, ...S.map(d => Math.max(d.inBed || 0, d.need || 0))));
+  const needChart = timeChart(R, {
+    yMin: 0, yMax: hiH, ticks: niceTicks(0, hiH, 4), yFmt: v => `${v}h`, label: "Sono e necessidade",
+    layers: [
+      { type: "stack", parts: [{ v: d => d.deep, color: "var(--st-deep)" }, { v: d => d.rem, color: "var(--st-rem)" }, { v: d => d.light, color: "var(--st-light)" }, { v: d => d.awake, color: "var(--st-awake)" }] },
+      { type: "tick", v: d => d.need, color: "var(--ink)" },
+    ],
+    tip: d => [{ color: "var(--ink)", value: fmtH(d.need), label: "necessidade" }, { value: fmtH(d.sleep), label: "dormiu" },
+      { color: "var(--st-deep)", value: fmtH(d.deep), label: "profundo" }, { color: "var(--st-rem)", value: fmtH(d.rem), label: "REM" },
+      { color: "var(--st-light)", value: fmtH(d.light), label: "leve" }, { color: "var(--st-awake)", value: fmtH(d.awake), label: "acordado" }],
+    tipNote: d => ok(d.perf) ? `Performance ${d.perf}% · eficiência ${fmt(d.eff)}% · ${d.dist ?? "–"} despertares` : null,
+  });
+
+  const needParts = timeChart(R, {
+    yMin: 0, yMax: Math.ceil(Math.max(9, ...S.map(d => d.need || 0))), yFmt: v => `${v}h`, label: "Composição da necessidade",
+    layers: [{ type: "stack", parts: [{ v: d => d.needBase, color: "var(--st-light)" }, { v: d => d.debt, color: "var(--z4)" }, { v: d => d.needStrain, color: "var(--strain)" }] }],
+    tip: d => [{ value: fmtH(d.need), label: "necessidade total" }, { color: "var(--st-light)", value: fmtH(d.needBase), label: "base" }, { color: "var(--z4)", value: fmtH(d.debt), label: "débito" }, { color: "var(--strain)", value: fmtH(d.needStrain), label: "esforço do dia" }, d.needNap ? { value: `−${fmtH(d.needNap)}`, label: "cochilos" } : null],
+  });
+
+  const bedLo = Math.floor((Math.min(...S.map(d => d.bed)) - 30) / 60) * 60;
+  const wakeHi = Math.ceil((Math.max(...S.map(d => d.wake)) + 30) / 60) * 60;
+  const tks = []; const stp = (wakeHi - bedLo) > 12 * 60 ? 240 : 120;
+  for (let t = Math.ceil(bedLo / stp) * stp; t <= wakeHi; t += stp) tks.push(t);
+  const winChart = timeChart(R, {
+    yMin: bedLo, yMax: wakeHi, invert: true, ticks: tks, yFmt: v => fmtClock(v).replace(":00", "h"), ml: 34, height: 230, label: "Horários de sono",
+    layers: [{ type: "range", lo: d => d.bed, hi: d => d.wake, color: d => d.weekend ? "var(--z4)" : "var(--sleep)" }],
+    tip: d => [{ color: d.weekend ? "var(--z4)" : "var(--sleep)", value: fmtClock(d.bed), label: "dormiu" }, { value: fmtClock(d.wake), label: "acordou" }, { value: fmtH(d.inBed), label: "na cama" }, { value: ok(d.cons) ? `${d.cons}%` : "–", label: "consistência" }],
+  });
+
+  const tot = k => S.reduce((a, d) => a + (d[k] || 0), 0);
+  const all = tot("deep") + tot("rem") + tot("light") || 1;
+  const stageRow = (lbl, k, color) => h("div", { style: "display:grid;grid-template-columns:72px minmax(0,1fr) 96px;gap:10px;align-items:center;font-size:13px" },
+    h("span", {}, lbl), h("div", { class: "hbar", style: "background:var(--surface-2)" }, h("div", { style: `flex:${tot(k) / all};background:${color}` }), h("div", { style: `flex:${1 - tot(k) / all};background:transparent` })),
+    h("span", { class: "num", style: "text-align:right;color:var(--ink-2)" }, h("b", { style: "color:var(--ink)" }, `${fmt((tot(k) / all) * 100)}%`), ` · ${fmtH(tot(k) / S.length)}`));
+  const napList = NAPS.filter(n => n.d >= R[0].d);
+
+  return h("div", { class: "panel" }, tiles,
+    card("moon", "Quanto você dormiu e quanto precisava", "Barras: fases do sono. Traço: necessidade calculada pelo WHOOP", needChart,
+      legend([["Profundo", "var(--st-deep)"], ["REM", "var(--st-rem)"], ["Leve", "var(--st-light)"], ["Acordado", "var(--st-awake)"], ["Necessidade", "var(--ink)", "line"]])),
+    h("div", { class: "grid-2" },
+      card("clock", "Horários de sono", "Do momento em que dormiu até acordar. Horários regulares melhoram a qualidade do sono", winChart,
+        legend([["Dia útil", "var(--sleep)"], ["Fim de semana", "var(--z4)"]])),
+      card("layers", "De onde vem sua necessidade", "O WHOOP soma sua base, o débito acumulado e o esforço do dia anterior", needParts,
+        legend([["Base", "var(--st-light)"], ["Débito", "var(--z4)"], ["Esforço", "var(--strain)"]]))),
+    h("div", { class: "grid-2" },
+      card("layers", "Composição do sono", "Média por noite, sem o tempo acordado. Referência típica: profundo 15–25%, REM 20–25%",
+        stageRow("Profundo", "deep", "var(--st-deep)"), stageRow("REM", "rem", "var(--st-rem)"), stageRow("Leve", "light", "var(--st-light)")),
+      card("moon", "Cochilos", napList.length ? `${napList.length} no período` : "Nenhum cochilo registrado no período",
+        napList.length ? h("div", { class: "cmp" }, napList.slice().reverse().slice(0, 6).map(n => h("div", { class: "cmp-row" }, h("span", {}, fmtDateLong(n.d)), h("span", { class: "now" }, fmtH(n.h)), h("span", { class: "was" }, `às ${n.t}`)))) : null)));
+}
+
+/* ---------- Esforço ---------- */
+function viewEsf() {
+  const R = rangeDays();
+  const done = R.filter(d => !d.live);
+  const first = R[0].d;
+  const W = WOS.filter(w => w.d >= first).slice().reverse();
+  const zones = [0, 1, 2, 3, 4, 5].map(z => W.reduce((a, w) => a + (w.zones[z] || 0), 0));
+  const ZN = ["Zona 0", "Zona 1", "Zona 2", "Zona 3", "Zona 4", "Zona 5"];
+  const ZC = ["var(--z0)", "var(--z1)", "var(--z2)", "var(--z3)", "var(--z4)", "var(--z5)"];
+  const doneAll = DAYS.filter(d => !d.live);
+  const acute = mean(doneAll.slice(-7).map(d => d.strain));
+  const chronic = mean(doneAll.slice(-28).map(d => d.strain));
+  const acwr = doneAll.length >= 21 && chronic ? acute / chronic : null;
+  const last14 = k => DAYS.slice(-14).map(d => d.live ? null : d[k]);
+  const avgStrain = mean(done.map(d => d.strain));
+
+  const tiles = h("div", { class: "tiles" },
+    tile("Strain médio", fmt(avgStrain, 1), null, `nível ${strainLevel(avgStrain)}`, spark(last14("strain"), "var(--strain)")),
+    tile("Calorias por dia", fmt(mean(done.map(d => d.kcal))), "kcal", "gasto total estimado", spark(last14("kcal"), "var(--z4)")),
+    tile("Passos por dia", fmt(mean(done.map(d => d.steps))), null, "média do período", spark(last14("steps"), "var(--z2)")),
+    tile("Treinos", fmt(W.length), null, `${fmt(sum(W.map(w => w.min)))} min no total`),
+    tile("Zonas 4 e 5", fmt(zones[4] + zones[5]), "min", "alta intensidade no período"),
+    tile("Carga 7d ÷ 28d", acwr ? fmt(acwr, 2) : "–", null, acwr ? (acwr > 1.3 ? "acima de 1,3: risco de sobrecarga" : acwr < 0.8 ? "abaixo de 0,8: carga caindo" : "na faixa ideal de 0,8 a 1,3") : `disponível com 21 dias (faltam ${21 - doneAll.length})`));
+
+  const hiS = Math.max(21, Math.ceil(Math.max(...R.map(d => d.strain || 0))));
+  const avgMap = new Map();
+  R.forEach((d, i) => { const v = R.slice(Math.max(0, i - 6), i + 1).filter(x => !x.live).map(x => x.strain).filter(ok); avgMap.set(d.d, v.length >= 3 ? mean(v) : null); });
+  const strainChart = timeChart(R, {
+    yMin: 0, yMax: hiS, ticks: [0, 7, 14, 21], label: "Strain diário",
+    layers: [{ type: "bar", v: d => d.strain, color: "var(--strain)", dim: d => d.live }, { type: "line", v: d => avgMap.get(d.d), color: "var(--z4)", width: 2 }],
+    tip: d => [{ color: "var(--strain)", value: fmt(d.strain, 1), label: d.live ? "Strain (em andamento)" : `Strain ${strainLevel(d.strain)}` }, { value: `${fmt(d.kcal)} kcal`, label: "gasto" }, { value: fmt(d.steps), label: "passos" },
+      ...d.wo.map(w => ({ value: fmt(w.strain, 1), label: `${sportName(w.sport)} · ${w.min} min` }))],
+  });
+  const stepsChart = timeChart(R, {
+    yMin: 0, yMax: Math.ceil(Math.max(10000, ...R.map(d => d.steps || 0)) / 2000) * 2000, label: "Passos", yFmt: v => v >= 1000 ? `${fmt(v / 1000)} mil` : fmt(v),
+    layers: [{ type: "bar", v: d => d.steps, color: "var(--z2)", dim: d => d.live }, { type: "hline", y: 8000, color: "var(--muted)", text: "meta 8 mil" }],
+    tip: d => [{ color: "var(--z2)", value: fmt(d.steps), label: d.live ? "passos até agora" : "passos" }, { value: `${fmt(d.kcal)} kcal`, label: "gasto total" }],
+  });
+
+  const bySport = {};
+  W.forEach(w => { const k = sportName(w.sport); (bySport[k] ||= []).push(w); });
+  const sportRows = Object.entries(bySport).sort((a, b) => b[1].length - a[1].length);
+  const sportTable = sportRows.length ? h("div", { class: "table-wrap" }, h("table", {},
+    h("thead", {}, h("tr", {}, ["Esporte", "Sessões", "Minutos", "Strain médio", "FC máx", "kcal"].map(t => h("th", {}, t)))),
+    h("tbody", {}, sportRows.map(([k, a]) => h("tr", {}, h("td", {}, k), h("td", {}, a.length), h("td", {}, fmt(sum(a.map(w => w.min)))), h("td", {}, fmt(mean(a.map(w => w.strain)), 1)), h("td", {}, Math.max(...a.map(w => w.maxHr || 0))), h("td", {}, fmt(sum(a.map(w => w.kcal))))))))) : emptyNote("Nenhum treino neste período.");
+
+  const woList = W.length ? h("div", { class: "workouts" }, W.slice(0, 20).map(w => h("div", { class: "wo" },
+    h("div", { class: "wi" }, sportName(w.sport).slice(0, 1)),
+    h("div", {}, h("div", { class: "name" }, sportName(w.sport)), h("div", { class: "when" }, `${fmtDateLong(w.d)} · ${w.t} · ${w.min} min`)),
+    h("div", { class: "st" }, h("b", {}, fmt(w.strain, 1)), h("span", {}, "Strain")),
+    h("div", { class: "facts" }, h("span", {}, `FC média ${w.avgHr ?? "–"}`), h("span", {}, `máx ${w.maxHr ?? "–"} bpm`), h("span", {}, `${fmt(w.kcal)} kcal`), w.km ? h("span", {}, `${fmt(w.km, 2)} km`) : null),
+    hbar(w.zones.map((v, z) => ({ v, color: ZC[z], label: ZN[z], text: `${fmt(v, 1)} min` })))))) : emptyNote("Nenhum treino neste período.");
+
+  const body = [];
+  if (PROFILE.weight) body.push(["Peso", `${fmt(PROFILE.weight, 1)} kg`]);
+  if (PROFILE.height) body.push(["Altura", `${fmt(PROFILE.height, 2)} m`]);
+  if (PROFILE.weight && PROFILE.height) body.push(["IMC", fmt(PROFILE.weight / PROFILE.height ** 2, 1)]);
+  if (PROFILE.maxHr) body.push(["FC máxima no perfil", `${PROFILE.maxHr} bpm`]);
+  const A = analysis();
+  if (A.woMaxHr) body.push(["FC máxima registrada", `${A.woMaxHr} bpm`]);
+
+  return h("div", { class: "panel" }, tiles,
+    card("bolt", "Strain diário", "Esforço cardiovascular do dia, de 0 a 21. Leve até 9, moderado de 10 a 13, alto de 14 a 17, máximo de 18 a 21", strainChart,
+      legend([["Strain do dia", "var(--strain)"], ["Média 7 dias", "var(--z4)", "line"]])),
+    h("div", { class: "grid-2" },
+      card("list", "Treinos", "Mais recentes primeiro. A barra mostra o tempo em cada zona de FC", woList, legend(ZN.map((nm, i) => [nm, ZC[i]]))),
+      h("div", { class: "stack" },
+        card("heart", "Tempo por zona de FC", "Soma de todos os treinos do período",
+          hbar(zones.map((v, z) => ({ v, color: ZC[z], label: ZN[z], text: `${fmt(v)} min` }))),
+          h("div", { style: "display:grid;gap:7px" }, zones.map((v, z) => h("div", { style: "display:flex;justify-content:space-between;font-size:13px;gap:8px" },
+            h("span", { style: "display:flex;align-items:center;gap:8px" }, h("i", { style: `width:10px;height:10px;border-radius:3px;background:${ZC[z]};display:inline-block` }), ZN[z], h("span", { style: "color:var(--muted)" }, ["repouso", "50–60%", "60–70%", "70–80%", "80–90%", "90–100%"][z])),
+            h("b", { class: "num" }, `${fmt(v)} min`))))),
+        card("trend", "Por esporte", null, sportTable),
+        body.length ? card("scale", "Corpo", "Do seu perfil no WHOOP", h("div", { class: "cmp" }, body.map(([a, b]) => h("div", { class: "cmp-row" }, h("span", {}, a), h("span", { class: "now" }, b), h("span", {}))))) : null)),
+    card("steps", "Passos", "Contagem diária do WHOOP. A linha marca 8 mil passos", stepsChart));
+}
+
+/* ---------- Padrões ---------- */
+function viewPad() {
+  const A = analysis();
+  const ins = insights(A);
+  const recColor = r => ZONE_VAR[zoneOf(r)];
+  const sc1 = A.sleepRec.length >= 3 ? scatter(A.sleepRec.map(p => ({ x: p.x, y: p.y, color: recColor(p.y), title: fmtDateLong(p.d.d), rows: [{ color: recColor(p.y), value: `${p.y}%`, label: "Recovery" }, { value: fmtH(p.x), label: "sono" }] })),
+    { xLabel: "horas dormidas", xFmt: v => `${fmt(v, v % 1 ? 1 : 0)}h` }) : emptyNote("Precisa de pelo menos 3 noites.");
+  const sc2 = A.strainNext.length >= 3 ? scatter(A.strainNext.map(p => ({ x: p.x, y: p.y, color: recColor(p.y), title: `${fmtDate(p.d.d)} → ${fmtDate(p.nx.d)}`, rows: [{ value: fmt(p.x, 1), label: "Strain do dia" }, { color: recColor(p.y), value: `${p.y}%`, label: "Recovery no dia seguinte" }] })),
+    { xLabel: "Strain do dia" }) : emptyNote("Precisa de pelo menos 3 pares de dias.");
+  const sc3 = A.bedRec.length >= 3 ? scatter(A.bedRec.map(p => ({ x: p.x, y: p.y, color: recColor(p.y), title: fmtDateLong(p.d.d), rows: [{ value: fmtClock(p.x), label: "dormiu" }, { color: recColor(p.y), value: `${p.y}%`, label: "Recovery" }] })),
+    { xLabel: "horário em que dormiu", xFmt: v => fmtClock(v).replace(":00", "h") }) : emptyNote("Precisa de pelo menos 3 noites.");
+
+  const byWd = [1, 2, 3, 4, 5, 6, 0].map(wd => { const x = DAYS.filter(d => d.wd === wd); return { wd, rec: mean(x.map(d => d.rec)), sleep: mean(x.map(d => d.sleep)), strain: mean(x.filter(d => !d.live).map(d => d.strain)), bed: mean(x.map(d => d.bed)), n: x.filter(d => ok(d.rec)).length }; });
+  const wdTable = h("div", { class: "table-wrap" }, h("table", {},
+    h("thead", {}, h("tr", {}, h("th", {}, ""), ...byWd.map(w => h("th", {}, WD[w.wd])))),
+    h("tbody", {},
+      h("tr", {}, h("td", {}, "Recovery"), ...byWd.map(w => h("td", {}, ok(w.rec) ? h("span", {}, h("span", { class: "sw", style: `background:${recColor(w.rec)}` }), `${fmt(w.rec)}%`) : "–"))),
+      h("tr", {}, h("td", {}, "Sono"), ...byWd.map(w => h("td", {}, fmtH(w.sleep)))),
+      h("tr", {}, h("td", {}, "Dormiu às"), ...byWd.map(w => h("td", {}, fmtClock(w.bed)))),
+      h("tr", {}, h("td", {}, "Strain"), ...byWd.map(w => h("td", {}, fmt(w.strain, 1)))),
+      h("tr", {}, h("td", {}, "Dias"), ...byWd.map(w => h("td", {}, w.n))))));
+
+  const cols = [["Data", d => fmtDate(d.d) + " " + WD[d.wd]], ["Recovery", d => ok(d.rec) ? `${d.rec}%` : "–", d => recColor(d.rec)], ["HRV", d => fmt(d.hrv)], ["FC rep.", d => fmt(d.rhr)],
+    ["Sono", d => fmtH(d.sleep)], ["Necess.", d => fmtH(d.need)], ["Perf.", d => ok(d.perf) ? `${d.perf}%` : "–"], ["Dormiu", d => fmtClock(d.bed)], ["Acordou", d => fmtClock(d.wake)],
+    ["Strain", d => fmt(d.strain, 1) + (d.live ? "*" : "")], ["kcal", d => fmt(d.kcal)], ["Passos", d => fmt(d.steps)], ["Resp.", d => fmt(d.resp, 1)], ["SpO2", d => fmt(d.spo2, 1)], ["Temp.", d => fmt(d.temp, 1)]];
+  const hist = h("div", { class: "table-wrap" }, h("table", {},
+    h("thead", {}, h("tr", {}, cols.map(c => h("th", {}, c[0])))),
+    h("tbody", {}, rangeDays().slice().reverse().map(d => h("tr", {}, cols.map(c => h("td", {}, c[2] && ok(d.rec) ? h("span", { class: "sw", style: `background:${c[2](d)}` }) : null, c[1](d))))))));
+
+  const rTxt = (r, n) => ok(r) ? `Correlação r = ${fmt(r, 2)} com ${n} pontos. ${Math.abs(r) < 0.2 ? "Sem relação clara ainda." : Math.abs(r) < 0.4 ? "Relação fraca." : Math.abs(r) < 0.6 ? "Relação moderada." : "Relação forte."}${n < 20 ? " Com menos de 20 pontos, trate como pista e não como conclusão." : ""}` : "";
+  const r1 = pearson(A.sleepRec.map(p => p.x), A.sleepRec.map(p => p.y));
+  const r2 = pearson(A.strainNext.map(p => p.x), A.strainNext.map(p => p.y));
+  const r3 = pearson(A.bedRec.map(p => p.x), A.bedRec.map(p => p.y));
+
+  return h("div", { class: "panel" },
+    card("list", "Descobertas", "Calculadas sobre todo o seu histórico. Ficam mais confiáveis a cada semana", ins.length ? h("div", { class: "insights" }, ins.map(insightEl)) : emptyNote("Ainda não há dados suficientes.")),
+    h("div", { class: "grid-3" },
+      card("moon", "Sono → Recovery", rTxt(r1, A.sleepRec.length), sc1),
+      card("bolt", "Strain → Recovery do dia seguinte", rTxt(r2, A.strainNext.length), sc2),
+      card("clock", "Horário de dormir → Recovery", rTxt(r3, A.bedRec.length), sc3)),
+    card("cal", "Por dia da semana", "Médias de todo o histórico", wdTable),
+    card("list", "Histórico dia a dia", "Período selecionado, mais recente primeiro. * = dia em andamento", hist));
+}
+
+/* ---------- render ---------- */
+const VIEWS = { hoje: viewHoje, rec: viewRec, sono: viewSono, esf: viewEsf, pad: viewPad };
+function render() {
+  charts.length = 0;
+  hideTip();
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.tab === state.tab)));
+  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.range === state.range)));
+  $("#rangeBar").hidden = state.tab === "hoje";
+  const R = rangeDays();
+  $("#rangeNote").textContent = `${fmtDate(R[0].d)} a ${fmtDate(R[R.length - 1].d)} · ${R.length} dias${state.range !== "all" && R.length < Number(state.range) ? " (todo o seu histórico)" : ""}`;
+  $("#view").replaceChildren(VIEWS[state.tab]());
+  charts.forEach(c => c._draw());
+}
+
+function start() {
+  $("#lock").hidden = true;
+  $("#app").hidden = false;
+  if (!DATA || !DATA.days || !DATA.days.length) { $("#view").replaceChildren(card(null, "Sem dados ainda", "A próxima sincronização vai preencher o painel.")); return; }
+  prepare();
+  const gen = new Date(DATA.generated);
+  const mins = Math.round((Date.now() - gen) / 60000);
+  const ago = mins < 60 ? `há ${Math.max(1, mins)} min` : mins < 1440 ? `há ${Math.round(mins / 60)} h` : `há ${Math.round(mins / 1440)} dias`;
+  const hr = new Date().getHours();
+  $("#hello").textContent = `${hr < 12 ? "Bom dia" : hr < 18 ? "Boa tarde" : "Boa noite"}${PROFILE.name ? ", " + PROFILE.name : ""}`;
+  $("#meta").textContent = `Atualizado ${ago} · ${gen.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`;
+  $("#meta").classList.toggle("stale", mins > 6 * 60);
+  document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => { state.tab = t.dataset.tab; store.set("tab", state.tab); render(); scrollTo({ top: 0 }); }));
+  document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => { state.range = b.dataset.range; store.set("range", state.range); render(); }));
+  let rt, lastW = innerWidth;
+  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (Math.abs(innerWidth - lastW) > 40) { lastW = innerWidth; render(); } else charts.forEach(c => c._draw()); }, 150); });
+  render();
+}
+
+/* ---------- senha ---------- */
+const b64 = x => Uint8Array.from(atob(x), c => c.charCodeAt(0));
+const toB64 = u8 => btoa(String.fromCharCode(...u8));
+async function deriveKey(pw, enc) {
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveBits"]);
+  return new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: b64(enc.salt), iterations: enc.iter }, base, 256));
+}
+async function decrypt(raw, enc) {
+  const key = await crypto.subtle.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
+  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(enc.iv) }, key, b64(enc.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+async function boot() {
+  if (!PAYLOAD || !PAYLOAD.enc) { DATA = PAYLOAD; start(); return; }
+  const enc = PAYLOAD.enc;
+  const saved = store.get("whoop-key", null);
+  if (saved) { try { DATA = await decrypt(b64(saved), enc); start(); return; } catch { store.del("whoop-key"); } }
+  $("#lock").hidden = false;
+  $("#pw").focus();
+  $("#lockForm").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const btn = $("#unlockBtn"); btn.disabled = true; btn.textContent = "Abrindo...";
+    $("#lockErr").textContent = "";
+    try {
+      const raw = await deriveKey($("#pw").value, enc);
+      DATA = await decrypt(raw, enc);
+      if ($("#remember").checked) store.set("whoop-key", toB64(raw));
+      start();
+    } catch {
+      $("#lockErr").textContent = "Senha incorreta. Confira e tente de novo.";
+      btn.disabled = false; btn.textContent = "Abrir painel";
+    }
+  });
+}
+$("#logout").addEventListener("click", ev => { ev.preventDefault(); store.del("whoop-key"); location.reload(); });
+boot();
+</script>
+</body>
+</html>

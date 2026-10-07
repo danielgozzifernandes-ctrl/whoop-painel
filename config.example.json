@@ -1,0 +1,5 @@
+{
+  "client_id": "COLE_AQUI_O_CLIENT_ID",
+  "client_secret": "COLE_AQUI_O_CLIENT_SECRET",
+  "redirect_uri": "http://localhost:8080/callback"
+}

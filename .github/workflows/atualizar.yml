@@ -1,0 +1,95 @@
+name: Atualizar painel WHOOP
+
+on:
+  schedule:
+    # horários em UTC (Brasília = UTC-3)
+    - cron: "17 9-16 * * *"     # de hora em hora, 06h às 13h
+    - cron: "17 18,21,0,3 * * *" # 15h, 18h, 21h e 00h
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["dashboard/**", "build_dashboard.py", "whoop_sync.py", ".github/workflows/**"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: whoop-sync
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    env:
+      WHOOP_STATE_DIR: ${{ github.workspace }}/.state
+      STATE_KEY: ${{ secrets.STATE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install --quiet cryptography pillow
+
+      - name: Restaurar estado (login + histórico)
+        run: |
+          if git ls-remote --exit-code origin state >/dev/null; then
+            git fetch -q origin state
+            git show origin/state:state.enc > state.enc
+          fi
+          python state_crypto.py unpack
+
+      - name: Buscar dados no WHOOP
+        id: sync
+        env:
+          WHOOP_CLIENT_ID: ${{ secrets.WHOOP_CLIENT_ID }}
+          WHOOP_CLIENT_SECRET: ${{ secrets.WHOOP_CLIENT_SECRET }}
+        run: python whoop_sync.py
+
+      # roda mesmo se a sincronização falhar no meio: o token pode ter sido renovado
+      - name: Salvar estado
+        if: always()
+        run: |
+          [ -f "$WHOOP_STATE_DIR/tokens.json" ] || exit 0
+          python state_crypto.py pack
+          tmp=$(mktemp -d)
+          cp state.enc "$tmp/"
+          cd "$tmp"
+          git init -q -b state
+          git config user.name "whoop-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state.enc
+          git commit -qm "estado criptografado"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" state
+
+      - name: Gerar painel
+        env:
+          DASH_PASSWORD: ${{ secrets.DASH_PASSWORD }}
+        run: python build_dashboard.py
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+      # o GitHub desativa agendamentos de repositórios sem commits há 60 dias
+      - name: Manter agendamento ativo
+        run: |
+          last=$(git log -1 --format=%ct origin/main)
+          if [ $(( $(date +%s) - last )) -gt $(( 45 * 86400 )) ]; then
+            git config user.name "whoop-bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -q --allow-empty -m "manter agendamento ativo"
+            git push -q origin HEAD:main
+          fi

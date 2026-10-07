@@ -6,6 +6,11 @@ on:
     - cron: "17 9-16 * * *"     # de hora em hora, 06h às 13h
     - cron: "17 18,21,0,3 * * *" # 15h, 18h, 21h e 00h
   workflow_dispatch:
+    inputs:
+      forcar_renovacao:
+        description: "Renovar o token do WHOOP mesmo sem ter expirado (teste)"
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths: ["dashboard/**", "build_dashboard.py", "whoop_sync.py", ".github/workflows/**"]
@@ -30,15 +35,15 @@ jobs:
       WHOOP_STATE_DIR: ${{ github.workspace }}/.state
       STATE_KEY: ${{ secrets.STATE_KEY }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
 
-      - run: pip install --quiet cryptography pillow
+      - run: pip install --quiet "cryptography==46.*" "pillow==12.*"
 
       - name: Restaurar estado (login + histórico)
         run: |
@@ -53,6 +58,7 @@ jobs:
         env:
           WHOOP_CLIENT_ID: ${{ secrets.WHOOP_CLIENT_ID }}
           WHOOP_CLIENT_SECRET: ${{ secrets.WHOOP_CLIENT_SECRET }}
+          FORCE_REFRESH: ${{ inputs.forcar_renovacao && '1' || '' }}
         run: python whoop_sync.py
 
       # roda mesmo se a sincronização falhar no meio: o token pode ter sido renovado
@@ -76,12 +82,12 @@ jobs:
           DASH_PASSWORD: ${{ secrets.DASH_PASSWORD }}
         run: python build_dashboard.py
 
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 
       # o GitHub desativa agendamentos de repositórios sem commits há 60 dias
       - name: Manter agendamento ativo

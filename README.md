@@ -24,6 +24,8 @@ Nada legível sobre saúde fica no repositório ou na página pública.
 
 ```bash
 python state_crypto.py pull       # baixa e abre o estado mais recente (precisa de state_key no config.json)
+python whoop_sync.py auth          # se o login do WHOOP cair: refaz o login no navegador...
+python state_crypto.py push        # ...e envia o login novo para o GitHub
 python build_dashboard.py --plain # gera site/index.html sem senha para ver localmente
 gh workflow run atualizar.yml     # força uma atualização agora
 ```

@@ -7,6 +7,7 @@ Uso:
     python state_crypto.py pack      # tokens.json + whoop.db -> state.enc
     python state_crypto.py unpack    # state.enc -> tokens.json + whoop.db
     python state_crypto.py pull      # baixa state.enc do branch "state" e abre (uso local)
+    python state_crypto.py push      # envia tokens.json + whoop.db locais (depois de refazer o login)
     python state_crypto.py newkey    # gera uma chave nova
 """
 import base64
@@ -65,11 +66,26 @@ def pull():
     unpack()
 
 
+def push():
+    import tempfile
+
+    pack()
+    remote = subprocess.run(["git", "remote", "get-url", "origin"], cwd=BASE_DIR, check=True, capture_output=True, text=True).stdout.strip()
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "state.enc").write_bytes(STATE_FILE.read_bytes())
+        for cmd in (["git", "init", "-q", "-b", "state"], ["git", "add", "state.enc"],
+                    ["git", "-c", "user.name=whoop-bot", "-c", "user.email=whoop-bot@users.noreply.github.com", "commit", "-qm", "estado criptografado"],
+                    ["git", "push", "-qf", remote, "state"]):
+            subprocess.run(cmd, cwd=tmp, check=True)
+    STATE_FILE.unlink()
+    print("Estado enviado para o branch state.")
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
     if cmd == "newkey":
         print(base64.b64encode(os.urandom(32)).decode())
-    elif cmd in ("pack", "unpack", "pull"):
+    elif cmd in ("pack", "unpack", "pull", "push"):
         globals()[cmd]()
     else:
         sys.exit(__doc__)

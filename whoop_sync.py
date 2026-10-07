@@ -55,7 +55,7 @@ def load_config():
 def post_form(url, data):
     body = urllib.parse.urlencode(data).encode()
     req = urllib.request.Request(url, data=body, headers={"Content-Type": "application/x-www-form-urlencoded", **UA})
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=30) as resp:
         return json.loads(resp.read())
 
 
@@ -118,7 +118,7 @@ def access_token(cfg):
     if not TOKEN_FILE.exists():
         sys.exit("Rode primeiro: python whoop_sync.py auth")
     tok = json.loads(TOKEN_FILE.read_text(encoding="utf-8"))
-    if time.time() < tok.get("expires_at", 0):
+    if time.time() < tok.get("expires_at", 0) and not os.environ.get("FORCE_REFRESH"):
         return tok["access_token"]
     new = post_form(TOKEN_URL, {
         "grant_type": "refresh_token",
@@ -128,6 +128,8 @@ def access_token(cfg):
         "scope": "offline",
     })
     new.setdefault("refresh_token", tok["refresh_token"])
+    print("Token renovado" + (" (refresh token trocado)" if new["refresh_token"] != tok["refresh_token"] else ""))
+    os.environ.pop("FORCE_REFRESH", None)
     return save_tokens(new)["access_token"]
 
 
@@ -136,14 +138,16 @@ def api_get(token, path, params=None):
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}", **UA})
     for attempt in range(5):
         try:
-            with urllib.request.urlopen(req) as resp:
+            with urllib.request.urlopen(req, timeout=30) as resp:
                 return json.loads(resp.read())
         except urllib.error.HTTPError as e:
-            if e.code == 429:
+            if e.code == 429 or e.code >= 500:
                 time.sleep(2 ** attempt * 5)
                 continue
             raise
-    raise RuntimeError("Limite de requisicoes excedido")
+        except urllib.error.URLError:
+            time.sleep(2 ** attempt * 5)
+    raise RuntimeError("WHOOP nao respondeu depois de varias tentativas")
 
 
 def fetch_all(token, path, start=None):
